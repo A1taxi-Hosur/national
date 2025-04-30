@@ -59,11 +59,12 @@ export default function OfferForm({ offer, onSuccess }: OfferFormProps) {
     const file = files[0];
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('name', file.name);
     
     setIsUploading(true);
     
     try {
-      const response = await fetch('/api/upload', {
+      const response = await fetch('/api/media', {
         method: 'POST',
         body: formData,
       });
