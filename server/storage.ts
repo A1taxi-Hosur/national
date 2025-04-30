@@ -114,7 +114,7 @@ export class MemStorage implements IStorage {
       {
         name: "Modern Velvet Sofa",
         description: "Elegant and comfortable velvet sofa perfect for your living room.",
-        imageUrl: "https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&q=80&w=800",
+        imageUrl: "https://images.unsplash.com/photo-1550581190-9c1c48d21d6c?auto=format&fit=crop&q=80&w=900",
         category: "Living Room",
         price: 42999,
         isNew: true,
@@ -124,7 +124,7 @@ export class MemStorage implements IStorage {
       {
         name: "Wooden Dining Table",
         description: "Sturdy wooden dining table that comfortably seats 6 people.",
-        imageUrl: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&q=80&w=800",
+        imageUrl: "https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?auto=format&fit=crop&q=80&w=900",
         category: "Dining",
         price: 36999,
         discountedPrice: 45999,
@@ -143,7 +143,7 @@ export class MemStorage implements IStorage {
       {
         name: "Ergonomic Office Desk",
         description: "Height-adjustable office desk for maximum comfort.",
-        imageUrl: "https://images.unsplash.com/photo-1591129841117-3adfd313a592?auto=format&fit=crop&q=80&w=800",
+        imageUrl: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&q=80&w=900",
         category: "Office",
         price: 24999,
         isFeatured: true,
