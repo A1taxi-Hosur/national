@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Phone, Mail, MapPin, Facebook, Instagram, ExternalLink, UserCog } from "lucide-react";
 import { getPlaceData, getDirectionsUrl, formatPhoneNumber } from "@/lib/google-maps";
 import { useAuth } from "@/hooks/use-auth";
+import justdialLogo from "@assets/justdial.webp";
 
 export default function Footer() {
   const placeData = getPlaceData();
@@ -28,7 +29,7 @@ export default function Footer() {
                 className="text-white/80 hover:text-white transition"
               >
                 <img 
-                  src="/justdial.webp" 
+                  src={justdialLogo} 
                   alt="JustDial" 
                   className="h-6 w-auto"
                   style={{ filter: 'brightness(0) invert(1)' }}
