@@ -11,7 +11,7 @@ export default function AboutPage() {
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="order-2 md:order-1">
-                <h2 className="text-3xl font-bold font-heading text-primary mb-6">Our Story Since 1972</h2>
+                <h2 className="text-3xl font-bold font-heading text-primary mb-6">Our Story</h2>
                 <p className="text-neutral-dark/80 mb-4">
                   National Furniture began as a small family-owned workshop in Bangalore over five decades ago. 
                   What started as a passion for crafting quality wooden furniture has evolved into one of the 

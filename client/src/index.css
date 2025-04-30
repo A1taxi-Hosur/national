@@ -15,7 +15,7 @@
   --card-foreground: 20 14.3% 4.1%;
   --border: 20 5.9% 90%;
   --input: 20 5.9% 90%;
-  --primary: 25 74% 31%; /* #8B4513 Brown */
+  --primary: 25 55% 35%; /* A slightly lighter darker brown */
   --primary-foreground: 0 0% 98%;
   --secondary: 60 55% 94%; /* #F5F5DC Beige */
   --secondary-foreground: 24 9.8% 10%;
@@ -44,7 +44,7 @@
   --card-foreground: 0 0% 98%;
   --border: 240 3.7% 15.9%;
   --input: 240 3.7% 15.9%;
-  --primary: 25 74% 31%;
+  --primary: 25 55% 35%;
   --primary-foreground: 0 0% 98%;
   --secondary: 240 3.7% 15.9%;
   --secondary-foreground: 0 0% 98%;

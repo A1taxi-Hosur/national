@@ -60,16 +60,16 @@ export default function Header() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <div className="mr-3">
+            <div className="mr-4">
               <img 
                 src={logoImage}
                 alt="National Furniture Logo" 
-                className="h-12 w-auto object-contain"
+                className="h-16 w-auto object-contain shadow-sm"
               />
             </div>
             <div>
-              <h1 className="text-xl md:text-2xl font-bold font-heading text-primary">NATIONAL FURNITURE & INTERIORS</h1>
-              <p className="text-xs text-gray-600">ESTABLISHED 1972</p>
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold font-heading text-primary tracking-tight">NATIONAL FURNITURE & INTERIORS</h1>
+
             </div>
           </Link>
           
