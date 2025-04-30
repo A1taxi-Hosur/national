@@ -89,11 +89,13 @@ export default function Header() {
               <Search className="h-5 w-5 text-neutral-dark" />
             </button>
             
-            <Link href={user ? "/admin/dashboard" : "/admin/login"}>
-              <Button asChild variant="default" className="hidden md:inline-block">
-                <a>{user ? "Admin Dashboard" : "Admin Login"}</a>
-              </Button>
-            </Link>
+            <Button 
+              variant="default" 
+              className="hidden md:inline-block"
+              onClick={() => window.location.href = user ? "/admin/dashboard" : "/admin/login"}
+            >
+              {user ? "Admin Dashboard" : "Admin Login"}
+            </Button>
             
             {/* Mobile menu button */}
             <button 
