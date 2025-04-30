@@ -1,279 +1,165 @@
-import { useQuery } from "@tanstack/react-query";
-import AdminSidebar from "@/components/layout/admin-sidebar";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { 
-  Package, 
-  Tag, 
-  Image, 
-  MessageSquare,
-  Loader2,
-  Edit,
-  Trash2
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { Redirect } from "wouter";
+import { Loader2, LayoutDashboard, Image, Tag, MessageSquare, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Product, Offer, Contact } from "@shared/schema";
-import { Link } from "wouter";
+import Statistics from "@/components/admin/statistics";
+import ProductForm from "@/components/admin/product-form";
+import OfferForm from "@/components/admin/offer-form";
+import MediaUpload from "@/components/admin/media-upload";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AdminDashboard() {
-  // Fetch the latest products, offers, and contacts
-  const { data: products, isLoading: isLoadingProducts } = useQuery<Product[]>({
-    queryKey: ['/api/products'],
-    queryFn: async () => {
-      const res = await fetch('/api/products');
-      if (!res.ok) throw new Error('Failed to fetch products');
-      return res.json();
-    }
-  });
+  const { user, isLoading, logoutMutation } = useAuth();
+  const [activeTab, setActiveTab] = useState<string>("overview");
 
-  const { data: offers, isLoading: isLoadingOffers } = useQuery<Offer[]>({
-    queryKey: ['/api/offers'],
-    queryFn: async () => {
-      const res = await fetch('/api/offers');
-      if (!res.ok) throw new Error('Failed to fetch offers');
-      return res.json();
-    }
-  });
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
-  const { data: contacts, isLoading: isLoadingContacts } = useQuery<Contact[]>({
-    queryKey: ['/api/contacts'],
-    queryFn: async () => {
-      const res = await fetch('/api/contacts');
-      if (!res.ok) throw new Error('Failed to fetch contacts');
-      return res.json();
-    }
-  });
+  if (!user || !user.isAdmin) {
+    return <Redirect to="/admin/login" />;
+  }
 
-  // Get counts
-  const productCount = products?.length || 0;
-  const offerCount = offers?.length || 0;
-  const activeOfferCount = offers?.filter(offer => offer.isActive).length || 0;
-  const contactCount = contacts?.length || 0;
-
-  // Get recent items
-  const recentProducts = products?.slice(0, 5).sort((a, b) => 
-    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  ) || [];
-
-  const activeOffers = offers?.filter(offer => offer.isActive).slice(0, 2) || [];
-
-  const isLoading = isLoadingProducts || isLoadingOffers || isLoadingContacts;
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      <AdminSidebar />
-      
-      <div className="flex-1 overflow-auto p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-neutral-dark">Dashboard</h2>
-          <div className="text-sm text-neutral-dark/70">Welcome to National Furniture Admin</div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="flex flex-col md:flex-row">
+        {/* Sidebar */}
+        <div className="w-full md:w-64 bg-white shadow-md md:min-h-screen p-4">
+          <div className="flex items-center mb-8 mt-2">
+            <LayoutDashboard className="h-6 w-6 text-primary mr-2" />
+            <h1 className="text-xl font-bold">Admin Dashboard</h1>
+          </div>
+          
+          <nav className="space-y-2">
+            <Button 
+              variant={activeTab === "overview" ? "default" : "ghost"} 
+              className="w-full justify-start"
+              onClick={() => setActiveTab("overview")}
+            >
+              <LayoutDashboard className="mr-2 h-4 w-4" />
+              Overview
+            </Button>
+            
+            <Button 
+              variant={activeTab === "products" ? "default" : "ghost"} 
+              className="w-full justify-start"
+              onClick={() => setActiveTab("products")}
+            >
+              <Tag className="mr-2 h-4 w-4" />
+              Products
+            </Button>
+            
+            <Button 
+              variant={activeTab === "offers" ? "default" : "ghost"} 
+              className="w-full justify-start"
+              onClick={() => setActiveTab("offers")}
+            >
+              <Tag className="mr-2 h-4 w-4" />
+              Offers
+            </Button>
+            
+            <Button 
+              variant={activeTab === "media" ? "default" : "ghost"} 
+              className="w-full justify-start"
+              onClick={() => setActiveTab("media")}
+            >
+              <Image className="mr-2 h-4 w-4" />
+              Media
+            </Button>
+            
+            <Button 
+              variant={activeTab === "messages" ? "default" : "ghost"} 
+              className="w-full justify-start"
+              onClick={() => setActiveTab("messages")}
+            >
+              <MessageSquare className="mr-2 h-4 w-4" />
+              Messages
+            </Button>
+            
+            <div className="pt-4 mt-4 border-t border-gray-200">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start text-red-600 hover:text-red-600 hover:bg-red-50"
+                onClick={handleLogout}
+                disabled={logoutMutation.isPending}
+              >
+                {logoutMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Logging out...
+                  </>
+                ) : (
+                  <>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </>
+                )}
+              </Button>
+            </div>
+          </nav>
         </div>
         
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : (
-          <>
-            {/* Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex items-center">
-                    <div className="bg-primary/10 p-3 rounded-full mr-4">
-                      <Package className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-neutral-dark/70">Total Products</p>
-                      <p className="text-2xl font-bold text-neutral-dark">{productCount}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex items-center">
-                    <div className="bg-success/10 p-3 rounded-full mr-4">
-                      <Tag className="h-6 w-6 text-success" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-neutral-dark/70">Active Offers</p>
-                      <p className="text-2xl font-bold text-neutral-dark">{activeOfferCount}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex items-center">
-                    <div className="bg-accent/10 p-3 rounded-full mr-4">
-                      <Tag className="h-6 w-6 text-accent" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-neutral-dark/70">Total Offers</p>
-                      <p className="text-2xl font-bold text-neutral-dark">{offerCount}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardContent className="pt-6">
-                  <div className="flex items-center">
-                    <div className="bg-destructive/10 p-3 rounded-full mr-4">
-                      <MessageSquare className="h-6 w-6 text-destructive" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-neutral-dark/70">Contact Messages</p>
-                      <p className="text-2xl font-bold text-neutral-dark">{contactCount}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+        {/* Main Content */}
+        <div className="flex-1 p-4 md:p-8">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+            <TabsList className="grid grid-cols-5 mb-6">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="products">Products</TabsTrigger>
+              <TabsTrigger value="offers">Offers</TabsTrigger>
+              <TabsTrigger value="media">Media</TabsTrigger>
+              <TabsTrigger value="messages">Messages</TabsTrigger>
+            </TabsList>
             
-            {/* Recent Products */}
-            <Card className="mb-8">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle>Recent Products</CardTitle>
-                  <CardDescription>Recently added products to your store</CardDescription>
-                </div>
-                <Button asChild variant="default">
-                  <Link href="/admin/products">Manage Products</Link>
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead>Product</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {recentProducts.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={6} className="text-center py-4">No products found</TableCell>
-                      </TableRow>
-                    ) : (
-                      recentProducts.map((product) => (
-                        <TableRow key={product.id}>
-                          <TableCell>#{product.id}</TableCell>
-                          <TableCell>
-                            <div className="flex items-center">
-                              <div className="h-10 w-10 bg-gray-200 rounded-md overflow-hidden mr-3">
-                                <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover" />
-                              </div>
-                              <div className="font-medium">{product.name}</div>
-                            </div>
-                          </TableCell>
-                          <TableCell>{product.category}</TableCell>
-                          <TableCell>
-                            {product.discountedPrice ? (
-                              <div>
-                                <span className="font-medium">₹{product.discountedPrice}</span>
-                                <span className="text-neutral-dark/50 line-through text-sm ml-2">₹{product.price}</span>
-                              </div>
-                            ) : (
-                              <span className="font-medium">₹{product.price}</span>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant={product.status === 'active' ? 'default' : 'outline'}>
-                              {product.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex space-x-2">
-                              <Button size="sm" variant="ghost">
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button size="sm" variant="ghost">
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+            <TabsContent value="overview" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-3xl font-bold">Dashboard Overview</h2>
+                <p className="text-sm text-muted-foreground">Welcome, {user.username}!</p>
+              </div>
+              <Statistics />
+            </TabsContent>
             
-            {/* Current Offers */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                  <CardTitle>Current Offers</CardTitle>
-                  <CardDescription>Active promotions in your store</CardDescription>
-                </div>
-                <Button asChild variant="default">
-                  <Link href="/admin/offers">Manage Offers</Link>
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {activeOffers.length === 0 ? (
-                    <div className="md:col-span-2 p-6 text-center border border-dashed rounded-lg">
-                      <p className="text-neutral-dark/70">No active offers</p>
-                      <Button variant="outline" className="mt-2" asChild>
-                        <Link href="/admin/offers">Create an Offer</Link>
-                      </Button>
-                    </div>
-                  ) : (
-                    activeOffers.map((offer) => (
-                      <Card key={offer.id}>
-                        <CardContent className="pt-6">
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <h4 className="font-medium">{offer.title}</h4>
-                              <p className="text-sm text-neutral-dark/70 mt-1">{offer.description}</p>
-                              {offer.expiryDate && (
-                                <p className="text-xs text-neutral-dark/50 mt-2">
-                                  Expires: {new Date(offer.expiryDate).toLocaleDateString()}
-                                </p>
-                              )}
-                            </div>
-                            <div className="flex space-x-2">
-                              <Button size="sm" variant="ghost">
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button size="sm" variant="ghost">
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </>
-        )}
+            <TabsContent value="products" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-3xl font-bold">Manage Products</h2>
+                <Button onClick={() => {}}>Add New Product</Button>
+              </div>
+              <ProductForm product={null} />
+            </TabsContent>
+            
+            <TabsContent value="offers" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-3xl font-bold">Manage Offers</h2>
+                <Button onClick={() => {}}>Add New Offer</Button>
+              </div>
+              <OfferForm offer={null} />
+            </TabsContent>
+            
+            <TabsContent value="media" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-3xl font-bold">Media Library</h2>
+              </div>
+              <MediaUpload />
+            </TabsContent>
+            
+            <TabsContent value="messages" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-3xl font-bold">Contact Messages</h2>
+              </div>
+              <div className="bg-white shadow rounded-lg p-6">
+                <p>Contact messages will be displayed here.</p>
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );

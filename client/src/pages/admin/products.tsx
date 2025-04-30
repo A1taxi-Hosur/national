@@ -1,8 +1,12 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import AdminSidebar from "@/components/layout/admin-sidebar";
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Product } from "@shared/schema";
-import { queryClient, apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/use-auth";
+import { Redirect } from "wouter";
+import { Loader2, Plus, Edit, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -11,267 +15,196 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
-import { Plus, Search, Edit, Trash2, Loader2, Check, X } from "lucide-react";
+import AdminSidebar from "@/components/layout/admin-sidebar";
 import ProductForm from "@/components/admin/product-form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest, getQueryFn, queryClient } from "@/lib/queryClient";
 
 export default function AdminProducts() {
+  const { user, isLoading } = useAuth();
+  const [search, setSearch] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isAddingNew, setIsAddingNew] = useState(false);
   const { toast } = useToast();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState<number | null>(null);
-  const [openProductDialog, setOpenProductDialog] = useState(false);
-  
-  // Fetch products
-  const { data: products, isLoading } = useQuery<Product[]>({
-    queryKey: ['/api/products'],
-    queryFn: async () => {
-      const res = await fetch('/api/products');
-      if (!res.ok) throw new Error('Failed to fetch products');
-      return res.json();
-    }
+
+  const {
+    data: products = [],
+    isLoading: isLoadingProducts,
+    error,
+  } = useQuery<Product[], Error>({
+    queryKey: ["/api/products"],
+    queryFn: getQueryFn({ on401: "throw" }),
   });
 
-  // Delete product mutation
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!user || !user.isAdmin) {
+    return <Redirect to="/admin/login" />;
+  }
+
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsAddingNew(false);
+  };
+
+  const handleDeleteProduct = async (id: number) => {
+    try {
       await apiRequest("DELETE", `/api/products/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/products'] });
+      queryClient.invalidateQueries({queryKey: ["/api/products"]});
       toast({
         title: "Product deleted",
-        description: "The product has been deleted successfully",
+        description: "The product has been successfully deleted.",
       });
-      setOpenDeleteDialog(null);
-    },
-    onError: (error) => {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: `Failed to delete product: ${error.message}`,
+        description: error.message || "Failed to delete product.",
         variant: "destructive",
       });
-    },
-  });
-
-  // Filter products based on search
-  const filteredProducts = products?.filter(product => 
-    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.category.toLowerCase().includes(searchQuery.toLowerCase())
-  ) || [];
-
-  // Handle edit product click
-  const handleEditProduct = (product: Product) => {
-    setEditingProduct(product);
-    setOpenProductDialog(true);
+    }
   };
 
-  // Handle dialog close
-  const handleDialogClose = () => {
-    setEditingProduct(null);
-    setOpenProductDialog(false);
+  const handleFormSuccess = () => {
+    setSelectedProduct(null);
+    setIsAddingNew(false);
+    queryClient.invalidateQueries({queryKey: ["/api/products"]});
   };
+
+  const filteredProducts = products.filter(
+    (product) =>
+      product.name.toLowerCase().includes(search.toLowerCase()) ||
+      product.category.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen bg-gray-50 flex">
       <AdminSidebar />
-      
-      <div className="flex-1 overflow-auto p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-neutral-dark">Products</h2>
-          
-          <Dialog open={openProductDialog} onOpenChange={setOpenProductDialog}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Product
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
-              <DialogHeader>
-                <DialogTitle>{editingProduct ? 'Edit Product' : 'Add New Product'}</DialogTitle>
-                <DialogDescription>
-                  {editingProduct 
-                    ? 'Update the product details and click save.' 
-                    : 'Fill in the product details and click add.'}
-                </DialogDescription>
-              </DialogHeader>
-              <ProductForm 
-                product={editingProduct} 
-                onSuccess={handleDialogClose} 
-              />
-            </DialogContent>
-          </Dialog>
+      <div className="flex-1 p-6">
+        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+          <h1 className="text-3xl font-bold">Manage Products</h1>
+          <Button 
+            className="mt-4 md:mt-0" 
+            onClick={() => {
+              setSelectedProduct(null);
+              setIsAddingNew(true);
+            }}
+          >
+            <Plus className="mr-2 h-4 w-4" /> Add New Product
+          </Button>
         </div>
-        
-        <Card className="mb-6">
-          <CardContent className="pt-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+
+        {selectedProduct || isAddingNew ? (
+          <Card>
+            <CardContent className="pt-6">
+              <Button 
+                variant="outline" 
+                className="mb-4" 
+                onClick={() => {
+                  setSelectedProduct(null);
+                  setIsAddingNew(false);
+                }}
+              >
+                ← Back to Products
+              </Button>
+              <ProductForm 
+                product={selectedProduct} 
+                onSuccess={handleFormSuccess}
+              />
+            </CardContent>
+          </Card>
+        ) : (
+          <>
+            <div className="mb-4">
               <Input
                 placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="max-w-md"
               />
             </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>All Products</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-8">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              </div>
-            ) : (
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead>Image</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Featured</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredProducts.length === 0 ? (
+
+            <Card>
+              <CardContent className="p-0">
+                {isLoadingProducts ? (
+                  <div className="flex justify-center items-center h-64">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  </div>
+                ) : error ? (
+                  <div className="p-6 text-center text-red-500">
+                    {error.message || "Failed to load products."}
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
                       <TableRow>
-                        <TableCell colSpan={8} className="text-center h-24">
-                          No products found
-                        </TableCell>
+                        <TableHead>ID</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Category</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Actions</TableHead>
                       </TableRow>
-                    ) : (
-                      filteredProducts.map((product) => (
-                        <TableRow key={product.id}>
-                          <TableCell>#{product.id}</TableCell>
-                          <TableCell>
-                            <div className="h-10 w-10 rounded-md overflow-hidden bg-neutral-50">
-                              <img 
-                                src={product.imageUrl} 
-                                alt={product.name}
-                                className="h-full w-full object-cover"
-                              />
-                            </div>
-                          </TableCell>
-                          <TableCell className="font-medium">{product.name}</TableCell>
-                          <TableCell>{product.category}</TableCell>
-                          <TableCell>
-                            {product.discountedPrice ? (
-                              <div>
-                                <span className="font-medium">₹{product.discountedPrice}</span>
-                                <span className="text-neutral-dark/50 line-through text-sm ml-2">₹{product.price}</span>
-                              </div>
-                            ) : (
-                              <span className="font-medium">₹{product.price}</span>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {product.isFeatured ? (
-                              <Check className="h-5 w-5 text-success" />
-                            ) : (
-                              <X className="h-5 w-5 text-neutral-dark/30" />
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant={product.status === 'active' ? 'default' : 'outline'}>
-                              {product.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex space-x-2">
-                              <Button 
-                                size="sm" 
-                                variant="ghost" 
-                                onClick={() => handleEditProduct(product)}
-                              >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              
-                              <Button 
-                                size="sm" 
-                                variant="ghost"
-                                onClick={() => setOpenDeleteDialog(product.id)}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredProducts.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={6} className="text-center py-8">
+                            No products found.
                           </TableCell>
                         </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-        
-        {/* Delete Confirmation Dialog */}
-        <AlertDialog 
-          open={openDeleteDialog !== null} 
-          onOpenChange={(open) => !open && setOpenDeleteDialog(null)}
-        >
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This will permanently delete this product. This action cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                onClick={() => {
-                  if (openDeleteDialog !== null) {
-                    deleteMutation.mutate(openDeleteDialog);
-                  }
-                }}
-                disabled={deleteMutation.isPending}
-              >
-                {deleteMutation.isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Deleting...
-                  </>
-                ) : (
-                  'Delete'
+                      ) : (
+                        filteredProducts.map((product) => (
+                          <TableRow key={product.id}>
+                            <TableCell>{product.id}</TableCell>
+                            <TableCell className="font-medium">{product.name}</TableCell>
+                            <TableCell>{product.category}</TableCell>
+                            <TableCell>{`₹${product.price / 100}`}</TableCell>
+                            <TableCell>
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs ${
+                                  product.status === "active"
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-gray-100 text-gray-800"
+                                }`}
+                              >
+                                {product.status || "inactive"}
+                              </span>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex space-x-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEditProduct(product)}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-red-500 hover:text-red-500"
+                                  onClick={() => handleDeleteProduct(product.id)}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
                 )}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+              </CardContent>
+            </Card>
+          </>
+        )}
       </div>
     </div>
   );

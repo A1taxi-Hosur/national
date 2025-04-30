@@ -1,8 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
+import { Loader2, Package, Tag, Megaphone, MessageSquare, Image } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Package, Tag, Gift, MessageSquare, ImageIcon } from "lucide-react";
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
+} from "recharts";
 
 interface AdminStats {
   productCount: number;
@@ -13,158 +24,142 @@ interface AdminStats {
 }
 
 export default function Statistics() {
-  const { data: stats, isLoading } = useQuery<AdminStats>({
+  const { data: stats, isLoading, error } = useQuery<AdminStats, Error>({
     queryKey: ["/api/admin/stats"],
+    queryFn: getQueryFn({ on401: "throw" }),
   });
-
-  // Generate chart data from stats
-  const chartData = stats
-    ? [
-        { name: "Products", value: stats.productCount, fill: "hsl(var(--chart-1))" },
-        { name: "Categories", value: stats.categoryCount, fill: "hsl(var(--chart-2))" },
-        { name: "Offers", value: stats.offerCount, fill: "hsl(var(--chart-3))" },
-        { name: "Messages", value: stats.messageCount, fill: "hsl(var(--chart-4))" },
-        { name: "Media", value: stats.mediaCount, fill: "hsl(var(--chart-5))" },
-      ]
-    : [];
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        {Array(5)
-          .fill(0)
-          .map((_, index) => (
-            <Card key={index}>
-              <CardHeader className="pb-2">
-                <Skeleton className="h-5 w-24" />
-              </CardHeader>
-              <CardContent>
-                <Skeleton className="h-8 w-12" />
-              </CardContent>
-            </Card>
-          ))}
-
-        <Card className="col-span-1 md:col-span-4">
-          <CardHeader>
-            <Skeleton className="h-6 w-32" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="h-64 w-full" />
-          </CardContent>
-        </Card>
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
-  if (!stats) {
+  if (error) {
     return (
-      <Card>
-        <CardContent className="pt-6">
-          <div className="text-center p-4">
-            <p>Failed to load statistics. Please try again later.</p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="p-6 text-center text-red-500">
+        {error.message || "Failed to load statistics."}
+      </div>
     );
   }
+
+  const statCards = [
+    {
+      title: "Products",
+      value: stats?.productCount || 0,
+      icon: <Package className="h-5 w-5 text-blue-500" />,
+      bgClass: "bg-blue-50",
+    },
+    {
+      title: "Categories",
+      value: stats?.categoryCount || 0,
+      icon: <Tag className="h-5 w-5 text-indigo-500" />,
+      bgClass: "bg-indigo-50",
+    },
+    {
+      title: "Offers",
+      value: stats?.offerCount || 0,
+      icon: <Megaphone className="h-5 w-5 text-yellow-500" />,
+      bgClass: "bg-yellow-50",
+    },
+    {
+      title: "Messages",
+      value: stats?.messageCount || 0,
+      icon: <MessageSquare className="h-5 w-5 text-emerald-500" />,
+      bgClass: "bg-emerald-50",
+    },
+    {
+      title: "Media Files",
+      value: stats?.mediaCount || 0,
+      icon: <Image className="h-5 w-5 text-rose-500" />,
+      bgClass: "bg-rose-50",
+    },
+  ];
+
+  const chartData = statCards.map((stat) => ({
+    name: stat.title,
+    value: stat.value,
+  }));
+
+  const COLORS = ["#3b82f6", "#6366f1", "#eab308", "#10b981", "#f43f5e"];
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {statCards.map((stat, index) => (
+          <Card key={index}>
+            <CardContent className="p-4 flex items-center gap-4">
+              <div className={`p-3 rounded-lg ${stat.bgClass}`}>{stat.icon}</div>
+              <div>
+                <p className="text-sm font-medium">{stat.title}</p>
+                <h3 className="text-2xl font-bold">{stat.value}</h3>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
-              <Package className="h-4 w-4 mr-1" />
-              Total Products
-            </CardTitle>
+          <CardHeader>
+            <CardTitle>Content Distribution</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.productCount}</div>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={chartData}
+                  margin={{
+                    top: 20,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="value" fill="#3b82f6" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
-              <Tag className="h-4 w-4 mr-1" />
-              Categories
-            </CardTitle>
+          <CardHeader>
+            <CardTitle>Content Share</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.categoryCount}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
-              <Gift className="h-4 w-4 mr-1" />
-              Active Offers
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.offerCount}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
-              <MessageSquare className="h-4 w-4 mr-1" />
-              Contact Messages
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.messageCount}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
-              <ImageIcon className="h-4 w-4 mr-1" />
-              Media Files
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.mediaCount}</div>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart width={400} height={300}>
+                  <Pie
+                    data={chartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
       </div>
-
-      <Card className="col-span-1 md:col-span-4">
-        <CardHeader>
-          <CardTitle>Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={chartData}
-                margin={{
-                  top: 20,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip 
-                  formatter={(value) => [`${value}`, 'Count']}
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '0.5rem'
-                  }}
-                />
-                <Bar dataKey="value" fill="var(--primary)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

@@ -322,6 +322,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin stats API
+  app.get('/api/admin/stats', ensureAuthenticated, async (req, res) => {
+    try {
+      const products = await storage.getAllProducts();
+      const offers = await storage.getAllOffers();
+      const contacts = await storage.getAllContacts();
+      const media = await storage.getAllMedia();
+      const categories = await storage.getCategories();
+      
+      const stats = {
+        productCount: products.length,
+        categoryCount: categories.length,
+        offerCount: offers.length,
+        messageCount: contacts.length,
+        mediaCount: media.length
+      };
+      
+      res.json(stats);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch admin statistics" });
+    }
+  });
+
   // Serve uploaded files
   app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
 
