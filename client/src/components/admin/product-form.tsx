@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -5,7 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Product } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, UploadCloud, Image as ImageIcon } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -13,6 +14,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 interface ProductFormProps {
   product: Product | null;
@@ -48,6 +51,8 @@ type ProductFormValues = z.infer<typeof productFormSchema>;
 
 export default function ProductForm({ product, onSuccess }: ProductFormProps) {
   const { toast } = useToast();
+  const [imagePreview, setImagePreview] = useState<string | null>(product?.imageUrl || null);
+  const [isUploading, setIsUploading] = useState(false);
   
   // Fetch categories
   const { data: categories } = useQuery<string[]>({
@@ -59,6 +64,45 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
     }
   });
 
+  // File upload handler
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+    
+    const file = files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    setIsUploading(true);
+    
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+      
+      const data = await response.json();
+      form.setValue('imageUrl', data.url);
+      setImagePreview(data.url);
+      toast({
+        title: "Image uploaded",
+        description: "The image has been uploaded successfully.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Upload failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   // Initialize form with product data if editing
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(productFormSchema),
@@ -67,7 +111,7 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
       description: product.description,
       imageUrl: product.imageUrl,
       category: product.category,
-      price: product.price,
+      price: product.price ?? undefined,
       discountedPrice: product.discountedPrice || undefined,
       isNew: product.isNew || false,
       isFeatured: product.isFeatured || false,
@@ -77,7 +121,7 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
       description: "",
       imageUrl: "",
       category: "",
-      price: 0,
+      price: undefined,
       discountedPrice: undefined,
       isNew: false,
       isFeatured: false,
@@ -164,14 +208,62 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
           name="imageUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Image URL</FormLabel>
-              <FormControl>
-                <Input 
-                  placeholder="https://example.com/image.jpg" 
-                  {...field} 
-                  disabled={mutation.isPending} 
-                />
-              </FormControl>
+              <FormLabel>Product Image</FormLabel>
+              <div className="flex flex-col space-y-3">
+                <div className="grid grid-cols-1 gap-3">
+                  <FormControl>
+                    <Input 
+                      {...field}
+                      className="hidden"
+                    />
+                  </FormControl>
+                  
+                  <div className="border rounded-md p-2">
+                    <Label htmlFor="product-image" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-50">
+                      {isUploading ? (
+                        <div className="flex flex-col items-center justify-center">
+                          <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
+                          <p className="text-sm text-gray-500">Uploading...</p>
+                        </div>
+                      ) : imagePreview ? (
+                        <div className="relative w-full h-full">
+                          <img 
+                            src={imagePreview} 
+                            alt="Product preview" 
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center">
+                          <UploadCloud className="h-10 w-10 text-gray-400 mb-2" />
+                          <p className="text-sm text-gray-500">Click to upload image</p>
+                          <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 10MB</p>
+                        </div>
+                      )}
+                      <Input 
+                        id="product-image"
+                        type="file"
+                        accept="image/*"
+                        className="sr-only"
+                        onChange={handleFileUpload}
+                        disabled={mutation.isPending || isUploading}
+                      />
+                    </Label>
+                  </div>
+                </div>
+                
+                <div className="flex items-center">
+                  <Input
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(e.target.value);
+                      setImagePreview(e.target.value);
+                    }}
+                    placeholder="Or paste image URL here"
+                    disabled={mutation.isPending || isUploading}
+                  />
+                </div>
+              </div>
               <FormMessage />
             </FormItem>
           )}
