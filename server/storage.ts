@@ -176,14 +176,18 @@ export class MemStorage implements IStorage {
       {
         title: "Summer Sale",
         description: "25% off on selected items",
+        imageUrl: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=900",
         expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
-        isActive: true
+        isActive: true,
+        isHomeHeader: true
       },
       {
         title: "Diwali Special",
         description: "Free delivery on orders above ₹25,000",
+        imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900",
         expiryDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000), // 45 days from now
-        isActive: true
+        isActive: true,
+        isHomeHeader: false
       }
     ];
 
@@ -299,8 +303,10 @@ export class MemStorage implements IStorage {
       id,
       title: offer.title,
       description: offer.description,
+      imageUrl: offer.imageUrl,
       expiryDate: offer.expiryDate ?? null,
       isActive: offer.isActive ?? null,
+      isHomeHeader: offer.isHomeHeader ?? null,
       createdAt: now
     };
     this.offers.set(id, newOffer);
@@ -317,8 +323,10 @@ export class MemStorage implements IStorage {
       id,
       title: offer.title ?? existingOffer.title,
       description: offer.description ?? existingOffer.description,
+      imageUrl: offer.imageUrl ?? existingOffer.imageUrl,
       expiryDate: offer.expiryDate ?? existingOffer.expiryDate,
       isActive: offer.isActive ?? existingOffer.isActive,
+      isHomeHeader: offer.isHomeHeader ?? existingOffer.isHomeHeader,
       createdAt: existingOffer.createdAt
     };
     
