@@ -104,7 +104,7 @@ export const nationalFurnitureData: PlaceData = {
     { day: "Saturday", hours: "10:00 AM - 8:00 PM" },
     { day: "Sunday", hours: "10:00 AM - 8:00 PM" }
   ],
-  url: "https://maps.google.com/?cid=5866776213766205746",
+  url: "https://g.co/kgs/UwVFQJq",
   place_id: "ChIJiZGiw-xiWjoRcCFHlRqjNFI"
 };
 

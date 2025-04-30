@@ -122,8 +122,11 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-white/70 text-sm mb-4 md:mb-0">&copy; {new Date().getFullYear()} National Furniture. All rights reserved. Established 1972.</p>
+        <div className="border-t border-white/20 mt-8 pt-8 flex flex-col justify-between items-center">
+          <div className="text-center mb-3">
+            <p className="text-white/70 text-sm mb-1">&copy; {new Date().getFullYear()} National Furniture. All rights reserved. Established 1972.</p>
+            <p className="text-white/50 text-xs">Website designed by ZARA CREATIONS</p>
+          </div>
           <div className="flex space-x-4 text-sm text-white/70 items-center">
             <a href="#" className="hover:text-white transition">Privacy Policy</a>
             <a href="#" className="hover:text-white transition">Terms of Service</a>
