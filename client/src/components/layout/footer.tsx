@@ -13,9 +13,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-xl font-bold font-heading mb-4">NATIONAL FURNITURE & INTERIORS</h3>
-            <p className="text-white/80 mb-4">Creating beautiful homes since 1972. Visit our showroom in HSR Layout, Bangalore.</p>
+            <p className="text-white/80 mb-4">Creating beautiful homes. Visit our showroom in HSR Layout, Bangalore.</p>
             <div className="flex space-x-4">
-              <a href="#" className="text-white/80 hover:text-white transition">
+              <a href="https://www.facebook.com/nationalfurnitureandinteriors/" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition">
                 <Facebook className="h-6 w-6" />
               </a>
               <a href="#" className="text-white/80 hover:text-white transition">
@@ -124,7 +124,7 @@ export default function Footer() {
         
         <div className="border-t border-white/20 mt-8 pt-8 flex flex-col justify-between items-center">
           <div className="text-center mb-3">
-            <p className="text-white/70 text-sm mb-1">&copy; {new Date().getFullYear()} National Furniture & Interiors. All rights reserved. Established 1972.</p>
+            <p className="text-white/70 text-sm mb-1">&copy; {new Date().getFullYear()} National Furniture & Interiors. All rights reserved.</p>
             <p className="text-white/50 text-xs">Website designed by ZARA CREATIONS</p>
           </div>
           <div className="flex space-x-4 text-sm text-white/70 items-center">
