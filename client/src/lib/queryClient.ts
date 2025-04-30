@@ -19,6 +19,18 @@ export async function apiRequest(
     credentials: "include",
   });
 
+  // For DELETE operations, we'll modify the behavior
+  // We don't immediately throw for DELETE operations to allow proper handling
+  if (method === 'DELETE') {
+    if (res.status === 404) {
+      console.error(`Resource not found at ${url}`);
+    } else if (!res.ok) {
+      console.error(`Error ${res.status} from ${url}: ${res.statusText}`);
+    }
+    return res;
+  }
+
+  // For non-DELETE operations, continue with the original behavior
   await throwIfResNotOk(res);
   return res;
 }
