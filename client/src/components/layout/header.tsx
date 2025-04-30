@@ -98,7 +98,7 @@ export default function Header() {
             </button>
             
             <Link href={user ? "/admin/dashboard" : "/admin/login"}>
-              <Button asChild variant="accent" className="hidden md:inline-block">
+              <Button asChild variant="default" className="hidden md:inline-block">
                 <a>{user ? "Admin Dashboard" : "Admin Login"}</a>
               </Button>
             </Link>
