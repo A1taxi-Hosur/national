@@ -37,9 +37,16 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
         
         <div className="flex justify-between items-center">
-          <Link href={`/product/${product.id}`}>
-            <Button size="sm">View Details</Button>
-          </Link>
+          <a 
+            href={`https://wa.me/917899551213?text=Hello,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}%20from%20National%20Furniture.%20Please%20provide%20more%20information.`} 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            <Button size="sm" className="flex items-center gap-1">
+              <Send className="h-4 w-4" />
+              <span>Send Enquiry</span>
+            </Button>
+          </a>
           <Button size="icon" variant="ghost" className="rounded-full">
             <Heart className="h-5 w-5" />
           </Button>
