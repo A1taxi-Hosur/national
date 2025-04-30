@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "@shared/schema";
@@ -18,11 +18,16 @@ import { Search } from "lucide-react";
 
 export default function ProductsPage() {
   const params = useParams();
-  const [location] = useLocation();
+  const [_, navigate] = useLocation();
   const categoryParam = params?.category;
   
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState("featured");
+  
+  // Scroll to top when category changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [categoryParam]);
   
   // Fetch categories
   const { data: categories, isLoading: loadingCategories } = useQuery<string[]>({
@@ -97,7 +102,7 @@ export default function ProductsPage() {
                   <div className="space-y-2">
                     <div 
                       className={`px-2 py-1 rounded cursor-pointer hover:bg-primary/10 ${!categoryParam ? 'bg-primary/10 font-medium' : ''}`}
-                      onClick={() => location('/products')}
+                      onClick={() => navigate('/products')}
                     >
                       All Products
                     </div>
@@ -105,7 +110,7 @@ export default function ProductsPage() {
                       <div 
                         key={category}
                         className={`px-2 py-1 rounded cursor-pointer hover:bg-primary/10 ${categoryParam === category ? 'bg-primary/10 font-medium' : ''}`}
-                        onClick={() => location(`/products/${category}`)}
+                        onClick={() => navigate(`/products/${category}`)}
                       >
                         {category}
                       </div>

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/home/hero-section";
@@ -9,6 +10,10 @@ import { Offer, Product } from "@shared/schema";
 import { Loader2 } from "lucide-react";
 
 export default function HomePage() {
+  // Scroll to top when visiting home page
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { data: products, isLoading: isLoadingProducts } = useQuery<Product[]>({
     queryKey: ['/api/products', { featured: true }],
     queryFn: async () => {

@@ -39,25 +39,23 @@ export default function CategorySection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category, index) => (
             <div key={index} className="rounded-lg overflow-hidden shadow-md group cursor-pointer">
-              <Link href={`/products/${category.name}`}>
-                <a>
-                  <div className="relative h-64 overflow-hidden">
-                    <img 
-                      src={category.image} 
-                      alt={`${category.name} Furniture`} 
-                      className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-primary/20 group-hover:bg-primary/10 transition duration-300"></div>
+              <Link href={`/products/${category.name}`} className="block">
+                <div className="relative h-64 overflow-hidden">
+                  <img 
+                    src={category.image} 
+                    alt={`${category.name} Furniture`} 
+                    className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-primary/20 group-hover:bg-primary/10 transition duration-300"></div>
+                </div>
+                <div className="p-5 bg-white">
+                  <h3 className="font-heading text-xl font-bold mb-2">{category.name}</h3>
+                  <p className="text-neutral-dark/70 mb-3">{category.description}</p>
+                  <div className="inline-flex items-center text-primary font-medium hover:underline">
+                    View Collection
+                    <ChevronRight className="h-4 w-4 ml-1" />
                   </div>
-                  <div className="p-5 bg-white">
-                    <h3 className="font-heading text-xl font-bold mb-2">{category.name}</h3>
-                    <p className="text-neutral-dark/70 mb-3">{category.description}</p>
-                    <div className="inline-flex items-center text-primary font-medium hover:underline">
-                      View Collection
-                      <ChevronRight className="h-4 w-4 ml-1" />
-                    </div>
-                  </div>
-                </a>
+                </div>
               </Link>
             </div>
           ))}
