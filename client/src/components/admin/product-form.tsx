@@ -116,7 +116,8 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
       discountedPrice: product.discountedPrice || undefined,
       isNew: product.isNew || false,
       isFeatured: product.isFeatured || false,
-      status: product.status || "active",
+      // Ensure status is either 'active' or 'inactive' (string literal type)
+      status: (product.status === 'inactive' ? 'inactive' : 'active') as 'active' | 'inactive',
     } : {
       name: "",
       description: "",
@@ -126,7 +127,7 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
       discountedPrice: undefined,
       isNew: false,
       isFeatured: false,
-      status: "active",
+      status: "active" as const,
     },
   });
 
@@ -395,8 +396,8 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
                 <FormLabel>Status</FormLabel>
                 <FormControl>
                   <Select 
-                    onValueChange={field.onChange} 
-                    defaultValue={field.value}
+                    onValueChange={(value: 'active' | 'inactive') => field.onChange(value)} 
+                    value={field.value}
                     disabled={mutation.isPending}
                   >
                     <SelectTrigger>

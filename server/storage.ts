@@ -286,17 +286,22 @@ export class MemStorage implements IStorage {
   async deleteProduct(id: number): Promise<boolean> {
     console.log(`Attempting to delete product with ID: ${id}`);
     console.log(`Current products before deletion: ${Array.from(this.products.keys()).join(', ')}`);
+    console.log(`Number of products before deletion: ${this.products.size}`);
+    
+    // Force convert id to number
+    const numericId = Number(id);
     
     // Make sure the ID exists
-    if (!this.products.has(id)) {
-      console.log(`Product ID ${id} not found in storage`);
+    if (!this.products.has(numericId)) {
+      console.log(`Product ID ${numericId} not found in storage`);
       return false;
     }
     
-    // Delete the product
-    const result = this.products.delete(id);
-    console.log(`Delete result: ${result}`);
+    // Delete the product - using explicit numeric ID
+    const result = this.products.delete(numericId);
+    console.log(`Delete result for ID ${numericId}: ${result}`);
     console.log(`Products after deletion: ${Array.from(this.products.keys()).join(', ')}`);
+    console.log(`Number of products after deletion: ${this.products.size}`);
     
     return result;
   }
@@ -351,17 +356,22 @@ export class MemStorage implements IStorage {
   async deleteOffer(id: number): Promise<boolean> {
     console.log(`Attempting to delete offer with ID: ${id}`);
     console.log(`Current offers before deletion: ${Array.from(this.offers.keys()).join(', ')}`);
+    console.log(`Number of offers before deletion: ${this.offers.size}`);
+    
+    // Force convert id to number
+    const numericId = Number(id);
     
     // Make sure the ID exists
-    if (!this.offers.has(id)) {
-      console.log(`Offer ID ${id} not found in storage`);
+    if (!this.offers.has(numericId)) {
+      console.log(`Offer ID ${numericId} not found in storage`);
       return false;
     }
     
-    // Delete the offer
-    const result = this.offers.delete(id);
-    console.log(`Delete result: ${result}`);
+    // Delete the offer - using explicit numeric ID
+    const result = this.offers.delete(numericId);
+    console.log(`Delete result for ID ${numericId}: ${result}`);
     console.log(`Offers after deletion: ${Array.from(this.offers.keys()).join(', ')}`);
+    console.log(`Number of offers after deletion: ${this.offers.size}`);
     
     return result;
   }
