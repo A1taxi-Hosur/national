@@ -48,8 +48,8 @@ export interface PlaceData {
 export const nationalFurnitureData: PlaceData = {
   name: "National Furniture",
   formatted_address: "No.1548, 20th Main Rd, Sector 1, HSR Layout, Bengaluru, Karnataka 560102, India",
-  formatted_phone_number: "080 2572 2127",
-  international_phone_number: "+91 80 2572 2127",
+  formatted_phone_number: "096636 28302",
+  international_phone_number: "+919663628302",
   website: "https://nationalfurnitures.in/",
   rating: 4.7,
   user_ratings_total: 125,

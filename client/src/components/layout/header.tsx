@@ -60,10 +60,11 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <div className="mr-3">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H6a2 2 0 01-2-2V6z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15v2a2 2 0 002 2h10a2 2 0 002-2v-2" />
-              </svg>
+              <img 
+                src="/assets/Logo-nationalfurnitures.jpg" 
+                alt="National Furniture Logo" 
+                className="h-12 w-auto object-contain"
+              />
             </div>
             <div>
               <h1 className="text-xl md:text-2xl font-bold font-heading text-primary">NATIONAL FURNITURE</h1>
