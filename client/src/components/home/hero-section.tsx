@@ -33,8 +33,8 @@ export default function HeroSection({ offer }: HeroSectionProps) {
           </div>
           <div className="relative rounded-lg overflow-hidden shadow-xl">
             <img 
-              src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?auto=format&fit=crop&q=80&w=1000" 
-              alt="Elegant living room furniture display" 
+              src="https://images.unsplash.com/photo-1540574163026-643ea20ade25?auto=format&fit=crop&q=80&w=1000" 
+              alt="Grand Sofa Display" 
               className="w-full h-96 object-cover"
             />
             {offer && (

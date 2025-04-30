@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, Search, X, ChevronDown } from "lucide-react";
+import { Menu, Search, X, ChevronDown, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import logoImage from "../../assets/logo-new.png";
@@ -127,11 +127,13 @@ export default function Header() {
             </button>
             
             <Button 
-              variant="default" 
-              className="hidden md:inline-block"
+              variant="outline" 
+              size="sm"
+              className="hidden md:inline-flex items-center"
               onClick={() => window.location.href = user ? "/admin/dashboard" : "/admin/login"}
             >
-              {user ? "Admin Dashboard" : "Admin Login"}
+              <UserCog className="h-4 w-4 mr-1" />
+              <span className="text-xs">{user ? "Admin" : "Admin"}</span>
             </Button>
             
             {/* Mobile menu button */}
@@ -195,8 +197,9 @@ export default function Header() {
               <Link href="/contact" className="px-2 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                 Contact
               </Link>
-              <Link href={user ? "/admin/dashboard" : "/admin/login"} className="px-2 py-2 text-white bg-accent hover:bg-accent/90 rounded-md text-center">
-                {user ? "Admin Dashboard" : "Admin Login"}
+              <Link href={user ? "/admin/dashboard" : "/admin/login"} className="px-2 py-2 flex items-center text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                <UserCog className="h-4 w-4 mr-2" />
+                <span>{user ? "Admin Dashboard" : "Admin Login"}</span>
               </Link>
             </div>
           </div>
