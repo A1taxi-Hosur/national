@@ -1,0 +1,332 @@
+import express, { type Express, type Request, type Response } from "express";
+import { createServer, type Server } from "http";
+import { storage } from "./storage";
+import { setupAuth } from "./auth";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import crypto from "crypto";
+import { 
+  insertProductSchema, 
+  insertOfferSchema, 
+  insertMediaSchema, 
+  insertContactSchema 
+} from "@shared/schema";
+import { ZodError } from "zod";
+
+// Configure multer for file uploads
+const generateUniqueFilename = (originalname: string) => {
+  const timestamp = Date.now();
+  const randomString = crypto.randomBytes(8).toString('hex');
+  const extension = path.extname(originalname);
+  return `${timestamp}-${randomString}${extension}`;
+};
+
+const storage_engine = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadDir = path.resolve(process.cwd(), 'uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, generateUniqueFilename(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage_engine });
+
+// Helper for zod validation
+const validateRequest = (schema: any, body: any) => {
+  try {
+    return { success: true, data: schema.parse(body) };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return { 
+        success: false, 
+        error: error.errors.map(e => `${e.path}: ${e.message}`).join(', ')
+      };
+    }
+    return { success: false, error: 'Invalid request data' };
+  }
+};
+
+export async function registerRoutes(app: Express): Promise<Server> {
+  // Set up authentication routes
+  setupAuth(app);
+
+  // Middleware to check if user is authenticated
+  const ensureAuthenticated = (req: Request, res: Response, next: Function) => {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.status(401).json({ message: "Unauthorized" });
+  };
+
+  // API Routes
+  // Products API
+  app.get('/api/products', async (req, res) => {
+    try {
+      const category = req.query.category as string;
+      const featured = req.query.featured === 'true';
+      
+      let products;
+      if (category) {
+        products = await storage.getProductsByCategory(category);
+      } else if (featured) {
+        products = await storage.getFeaturedProducts();
+      } else {
+        products = await storage.getAllProducts();
+      }
+      
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch products" });
+    }
+  });
+
+  app.get('/api/products/:id', async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid product ID" });
+      }
+      
+      const product = await storage.getProduct(id);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch product" });
+    }
+  });
+
+  app.post('/api/products', ensureAuthenticated, async (req, res) => {
+    try {
+      const validation = validateRequest(insertProductSchema, req.body);
+      if (!validation.success) {
+        return res.status(400).json({ message: validation.error });
+      }
+      
+      const product = await storage.createProduct(validation.data);
+      res.status(201).json(product);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create product" });
+    }
+  });
+
+  app.put('/api/products/:id', ensureAuthenticated, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid product ID" });
+      }
+      
+      const validation = validateRequest(insertProductSchema, req.body);
+      if (!validation.success) {
+        return res.status(400).json({ message: validation.error });
+      }
+      
+      const product = await storage.updateProduct(id, validation.data);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update product" });
+    }
+  });
+
+  app.delete('/api/products/:id', ensureAuthenticated, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid product ID" });
+      }
+      
+      const deleted = await storage.deleteProduct(id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete product" });
+    }
+  });
+
+  // Offers API
+  app.get('/api/offers', async (req, res) => {
+    try {
+      const offers = await storage.getAllOffers();
+      res.json(offers);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch offers" });
+    }
+  });
+
+  app.post('/api/offers', ensureAuthenticated, async (req, res) => {
+    try {
+      const validation = validateRequest(insertOfferSchema, req.body);
+      if (!validation.success) {
+        return res.status(400).json({ message: validation.error });
+      }
+      
+      const offer = await storage.createOffer(validation.data);
+      res.status(201).json(offer);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create offer" });
+    }
+  });
+
+  app.put('/api/offers/:id', ensureAuthenticated, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid offer ID" });
+      }
+      
+      const validation = validateRequest(insertOfferSchema, req.body);
+      if (!validation.success) {
+        return res.status(400).json({ message: validation.error });
+      }
+      
+      const offer = await storage.updateOffer(id, validation.data);
+      if (!offer) {
+        return res.status(404).json({ message: "Offer not found" });
+      }
+      
+      res.json(offer);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update offer" });
+    }
+  });
+
+  app.delete('/api/offers/:id', ensureAuthenticated, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid offer ID" });
+      }
+      
+      const deleted = await storage.deleteOffer(id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Offer not found" });
+      }
+      
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete offer" });
+    }
+  });
+
+  // Media API
+  app.get('/api/media', async (req, res) => {
+    try {
+      const media = await storage.getAllMedia();
+      res.json(media);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch media" });
+    }
+  });
+
+  app.post('/api/media', ensureAuthenticated, upload.single('file'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+      
+      const mediaData = {
+        name: req.body.name || req.file.originalname,
+        filename: req.file.filename,
+        type: req.file.mimetype,
+        url: `/uploads/${req.file.filename}`
+      };
+      
+      const validation = validateRequest(insertMediaSchema, mediaData);
+      if (!validation.success) {
+        return res.status(400).json({ message: validation.error });
+      }
+      
+      const media = await storage.createMedia(validation.data);
+      res.status(201).json(media);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to upload media" });
+    }
+  });
+
+  app.delete('/api/media/:id', ensureAuthenticated, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid media ID" });
+      }
+      
+      const media = await storage.getMedia(id);
+      if (!media) {
+        return res.status(404).json({ message: "Media not found" });
+      }
+      
+      // Delete the file
+      const filePath = path.resolve(process.cwd(), 'uploads', media.filename);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+      
+      const deleted = await storage.deleteMedia(id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Media not found" });
+      }
+      
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete media" });
+    }
+  });
+
+  // Contact Form API
+  app.post('/api/contact', async (req, res) => {
+    try {
+      const validation = validateRequest(insertContactSchema, req.body);
+      if (!validation.success) {
+        return res.status(400).json({ message: validation.error });
+      }
+      
+      const contact = await storage.createContact(validation.data);
+      res.status(201).json(contact);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to submit contact form" });
+    }
+  });
+
+  app.get('/api/contacts', ensureAuthenticated, async (req, res) => {
+    try {
+      const contacts = await storage.getAllContacts();
+      res.json(contacts);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch contacts" });
+    }
+  });
+
+  // Categories API
+  app.get('/api/categories', async (req, res) => {
+    try {
+      const categories = await storage.getCategories();
+      res.json(categories);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch categories" });
+    }
+  });
+
+  // Serve uploaded files
+  app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
+
+  // Create HTTP server
+  const httpServer = createServer(app);
+
+  return httpServer;
+}
