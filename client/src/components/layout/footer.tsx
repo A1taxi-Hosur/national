@@ -1,7 +1,8 @@
 import { Link } from "wouter";
-import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, ExternalLink, UserCog } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, ExternalLink, UserCog } from "lucide-react";
 import { getPlaceData, getDirectionsUrl, formatPhoneNumber } from "@/lib/google-maps";
 import { useAuth } from "@/hooks/use-auth";
+import { FaGlobe } from "react-icons/fa";
 
 export default function Footer() {
   const placeData = getPlaceData();
@@ -21,8 +22,14 @@ export default function Footer() {
               <a href="#" className="text-white/80 hover:text-white transition">
                 <Instagram className="h-6 w-6" />
               </a>
-              <a href="#" className="text-white/80 hover:text-white transition">
-                <Twitter className="h-6 w-6" />
+              <a 
+                href="https://www.justdial.com/jdmart/Bangalore/National-Furniture-Interiors-Opposite-to-Purva-Fairmount-Hsr-Layout-Sector-2/080PXX80-XX80-161203142958-H2Z7_BZDET/catalogue" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-white/80 hover:text-white transition"
+              >
+                <FaGlobe className="h-6 w-6" />
+                <span className="sr-only">JustDial</span>
               </a>
             </div>
           </div>
