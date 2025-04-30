@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Redirect } from "wouter";
 
 import { useAuth } from "@/hooks/use-auth";
+import logoImage from "../../assets/logo.jpg";
 import {
   Form,
   FormControl,
@@ -63,7 +64,7 @@ export default function AdminLogin() {
               <div className="flex justify-center lg:justify-start">
                 <div className="flex h-20 w-20 items-center justify-center">
                   <img 
-                    src={`${import.meta.env.BASE_URL}/logo.jpg`}
+                    src={logoImage}
                     alt="National Furniture Logo" 
                     className="h-20 w-auto object-contain"
                   />

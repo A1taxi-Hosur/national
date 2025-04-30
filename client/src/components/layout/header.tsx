@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Menu, Search, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
+import logoImage from "../../assets/logo.jpg";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -61,7 +62,7 @@ export default function Header() {
           <Link href="/" className="flex items-center">
             <div className="mr-3">
               <img 
-                src={`${import.meta.env.BASE_URL}/logo.jpg`}
+                src={logoImage}
                 alt="National Furniture Logo" 
                 className="h-12 w-auto object-contain"
               />
