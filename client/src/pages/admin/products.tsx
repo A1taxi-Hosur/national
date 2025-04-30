@@ -56,13 +56,26 @@ export default function AdminProducts() {
 
   const handleDeleteProduct = async (id: number) => {
     try {
-      await apiRequest("DELETE", `/api/products/${id}`);
-      queryClient.invalidateQueries({queryKey: ["/api/products"]});
-      toast({
-        title: "Product deleted",
-        description: "The product has been successfully deleted.",
-      });
+      console.log(`Attempting to delete product with ID: ${id}`);
+      
+      // Make the delete request
+      const response = await apiRequest("DELETE", `/api/products/${id}`);
+      const result = await response.json();
+      
+      console.log("Delete response:", result);
+      
+      if (result.success) {
+        // Ensure the list is refreshed
+        queryClient.invalidateQueries({queryKey: ["/api/products"]});
+        toast({
+          title: "Product deleted",
+          description: "The product has been successfully deleted.",
+        });
+      } else {
+        throw new Error(result.message || "Failed to delete product");
+      }
     } catch (error: any) {
+      console.error("Error deleting product:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to delete product.",

@@ -47,9 +47,22 @@ export default function AdminOffers() {
   // Delete offer mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/offers/${id}`);
+      console.log(`Attempting to delete offer with ID: ${id}`);
+      
+      // Make the delete request
+      const response = await apiRequest("DELETE", `/api/offers/${id}`);
+      const result = await response.json();
+      
+      console.log("Delete response:", result);
+      
+      if (!result.success) {
+        throw new Error(result.message || "Failed to delete offer");
+      }
+      
+      return result;
     },
     onSuccess: () => {
+      // Force refresh the offers list
       queryClient.invalidateQueries({ queryKey: ['/api/offers'] });
       toast({
         title: "Offer deleted",
@@ -57,7 +70,8 @@ export default function AdminOffers() {
       });
       setOpenDeleteDialog(null);
     },
-    onError: (error) => {
+    onError: (error: any) => {
+      console.error("Error deleting offer:", error);
       toast({
         title: "Error",
         description: `Failed to delete offer: ${error.message}`,
