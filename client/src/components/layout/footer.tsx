@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth";
 
 export default function Footer() {
   const placeData = getPlaceData();
+  const { user } = useAuth();
   
   return (
     <footer className="bg-accent text-white py-12">
@@ -123,10 +124,17 @@ export default function Footer() {
         
         <div className="border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-white/70 text-sm mb-4 md:mb-0">&copy; {new Date().getFullYear()} National Furniture. All rights reserved. Established 1972.</p>
-          <div className="flex space-x-4 text-sm text-white/70">
+          <div className="flex space-x-4 text-sm text-white/70 items-center">
             <a href="#" className="hover:text-white transition">Privacy Policy</a>
             <a href="#" className="hover:text-white transition">Terms of Service</a>
             <a href="#" className="hover:text-white transition">Shipping Policy</a>
+            <Link 
+              href={user ? "/admin/dashboard" : "/admin/login"} 
+              className="flex items-center bg-white/10 hover:bg-white/20 px-3 py-1 rounded-md ml-2 transition"
+            >
+              <UserCog className="h-3 w-3 mr-1" />
+              <span className="text-xs">{user ? "Admin" : "Admin"}</span>
+            </Link>
           </div>
         </div>
       </div>
