@@ -4,7 +4,7 @@ import { z } from "zod";
 import { Redirect } from "wouter";
 
 import { useAuth } from "@/hooks/use-auth";
-import logoImage from "../../assets/logo.jpg";
+import logoImage from "../../assets/logo-new.png";
 import {
   Form,
   FormControl,

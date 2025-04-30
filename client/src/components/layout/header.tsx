@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Menu, Search, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
-import logoImage from "../../assets/logo.jpg";
+import logoImage from "../../assets/logo-new.png";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

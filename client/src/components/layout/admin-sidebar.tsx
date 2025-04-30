@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Loader2, LayoutDashboard, Tag, Image, MessageSquare, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logoImage from "../../assets/logo.jpg";
+import logoImage from "../../assets/logo-new.png";
 
 export default function AdminSidebar() {
   const [location] = useLocation();
