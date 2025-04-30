@@ -10,6 +10,7 @@ import NotFound from "@/pages/not-found";
 import HomePage from "@/pages/home-page";
 import AboutPage from "@/pages/about-page";
 import ProductsPage from "@/pages/products-page";
+import ProductDetailPage from "@/pages/product-detail-page";
 import ContactPage from "@/pages/contact-page";
 import AdminLogin from "@/pages/admin/login";
 import AdminDashboard from "@/pages/admin/dashboard";
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/about" component={AboutPage} />
       <Route path="/products" component={ProductsPage} />
       <Route path="/products/:category" component={ProductsPage} />
+      <Route path="/product/:id" component={ProductDetailPage} />
       <Route path="/contact" component={ContactPage} />
       
       {/* Admin Routes */}

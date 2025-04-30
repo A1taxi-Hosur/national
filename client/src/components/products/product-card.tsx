@@ -32,7 +32,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               <Badge className="bg-success text-white">SALE</Badge>
             </div>
           )}
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-2 items-center justify-center">
             <Button 
               variant="secondary" 
               className="flex items-center gap-1"
@@ -41,15 +41,25 @@ export default function ProductCard({ product }: ProductCardProps) {
               <Eye className="h-4 w-4" />
               <span>Quick View</span>
             </Button>
+            <Link href={`/product/${product.id}`}>
+              <Button 
+                variant="secondary" 
+                className="flex items-center gap-1"
+              >
+                <span>View Details</span>
+              </Button>
+            </Link>
           </div>
         </div>
         <div className="p-4">
-          <h3 className="font-heading font-bold text-lg mb-1">{product.name}</h3>
-          <p className="text-neutral-dark/70 text-sm mb-2">{product.category}</p>
-          
-          <div className="h-5 mb-3">
-            {/* Price information removed as requested */}
-          </div>
+          <Link href={`/product/${product.id}`} className="block">
+            <h3 className="font-heading font-bold text-lg mb-1">{product.name}</h3>
+            <p className="text-neutral-dark/70 text-sm mb-2">{product.category}</p>
+            
+            <div className="h-5 mb-3">
+              {/* Price information removed as requested */}
+            </div>
+          </Link>
           
           <div className="flex justify-between items-center">
             <a 
@@ -62,7 +72,11 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <span>Send Enquiry</span>
               </Button>
             </a>
-            <Button size="icon" variant="ghost" className="rounded-full">
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="rounded-full"
+            >
               <Heart className="h-5 w-5" />
             </Button>
           </div>
