@@ -32,9 +32,13 @@ export default function AdminProducts() {
     data: products = [],
     isLoading: isLoadingProducts,
     error,
+    refetch: refetchProducts
   } = useQuery<Product[], Error>({
     queryKey: ["/api/products"],
     queryFn: getQueryFn({ on401: "throw" }),
+    refetchInterval: 0, // Don't auto refetch on interval
+    refetchOnWindowFocus: true, // Refetch when window gets focus
+    staleTime: 10000 // Data becomes stale after 10 seconds
   });
 
   if (isLoading) {
@@ -65,8 +69,10 @@ export default function AdminProducts() {
       console.log("Delete response:", result);
       
       if (result.success) {
-        // Ensure the list is refreshed
-        queryClient.invalidateQueries({queryKey: ["/api/products"]});
+        // Force complete refresh of product data
+        await queryClient.invalidateQueries({queryKey: ["/api/products"]});
+        await refetchProducts();
+        
         toast({
           title: "Product deleted",
           description: "The product has been successfully deleted.",
@@ -81,13 +87,30 @@ export default function AdminProducts() {
         description: error.message || "Failed to delete product.",
         variant: "destructive",
       });
+      
+      // Try to refresh anyway, in case the product was actually deleted
+      try {
+        await refetchProducts();
+      } catch (e) {
+        console.error("Failed to refresh products after delete error:", e);
+      }
     }
   };
 
-  const handleFormSuccess = () => {
+  const handleFormSuccess = async () => {
     setSelectedProduct(null);
     setIsAddingNew(false);
-    queryClient.invalidateQueries({queryKey: ["/api/products"]});
+    
+    // Force invalidate the cache
+    await queryClient.invalidateQueries({queryKey: ["/api/products"]});
+    
+    // Explicitly refetch products
+    await refetchProducts();
+    
+    toast({
+      title: "Product list updated",
+      description: "The product list has been refreshed with the latest changes."
+    });
   };
 
   const filteredProducts = products.filter(

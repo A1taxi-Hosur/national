@@ -35,13 +35,20 @@ export default function AdminOffers() {
   const [openOfferDialog, setOpenOfferDialog] = useState(false);
   
   // Fetch offers
-  const { data: offers, isLoading } = useQuery<Offer[]>({
+  const { 
+    data: offers, 
+    isLoading,
+    refetch: refetchOffers 
+  } = useQuery<Offer[]>({
     queryKey: ['/api/offers'],
     queryFn: async () => {
       const res = await fetch('/api/offers');
       if (!res.ok) throw new Error('Failed to fetch offers');
       return res.json();
-    }
+    },
+    refetchInterval: 0, // Don't auto refetch on interval
+    refetchOnWindowFocus: true, // Refetch when window gets focus
+    staleTime: 10000 // Data becomes stale after 10 seconds
   });
 
   // Delete offer mutation
@@ -61,22 +68,33 @@ export default function AdminOffers() {
       
       return result;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       // Force refresh the offers list
-      queryClient.invalidateQueries({ queryKey: ['/api/offers'] });
+      await queryClient.invalidateQueries({ queryKey: ['/api/offers'] });
+      
+      // Explicitly refetch offers to ensure UI is updated
+      await refetchOffers();
+      
       toast({
         title: "Offer deleted",
         description: "The offer has been deleted successfully",
       });
       setOpenDeleteDialog(null);
     },
-    onError: (error: any) => {
+    onError: async (error: any) => {
       console.error("Error deleting offer:", error);
       toast({
         title: "Error",
         description: `Failed to delete offer: ${error.message}`,
         variant: "destructive",
       });
+      
+      // Try to refresh anyway, in case the offer was actually deleted
+      try {
+        await refetchOffers();
+      } catch (e) {
+        console.error("Failed to refresh offers after delete error:", e);
+      }
     },
   });
 
@@ -87,9 +105,18 @@ export default function AdminOffers() {
   };
 
   // Handle dialog close
-  const handleDialogClose = () => {
+  const handleDialogClose = async () => {
     setEditingOffer(null);
     setOpenOfferDialog(false);
+    
+    // Force refresh data
+    await queryClient.invalidateQueries({ queryKey: ['/api/offers'] });
+    await refetchOffers();
+    
+    toast({
+      title: "Offer list updated",
+      description: "The offer list has been refreshed with the latest changes."
+    });
   };
 
   // Format date for display
