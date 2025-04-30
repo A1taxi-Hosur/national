@@ -1,6 +1,7 @@
 import { Link } from "wouter";
-import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, ExternalLink } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, ExternalLink, UserCog } from "lucide-react";
 import { getPlaceData, getDirectionsUrl, formatPhoneNumber } from "@/lib/google-maps";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Footer() {
   const placeData = getPlaceData();
@@ -112,7 +113,9 @@ export default function Footer() {
               </div>
               <div className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 flex-shrink-0" />
-                <p>info@nationalfurniture.in</p>
+                <a href="mailto:nationalfurniture07@gmail.com" className="text-white/80 hover:text-white transition">
+                  nationalfurniture07@gmail.com
+                </a>
               </div>
             </address>
           </div>

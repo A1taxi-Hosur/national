@@ -115,7 +115,7 @@ export default function ContactSection() {
                 <div>
                   <h3 className="font-medium text-lg mb-1">Contact</h3>
                   <p className="text-neutral-dark/70">Phone: +91 80 2663 4455</p>
-                  <p className="text-neutral-dark/70">Email: info@nationalfurniture.in</p>
+                  <p className="text-neutral-dark/70">Email: <a href="mailto:nationalfurniture07@gmail.com" className="hover:text-primary">nationalfurniture07@gmail.com</a></p>
                 </div>
               </div>
             </div>

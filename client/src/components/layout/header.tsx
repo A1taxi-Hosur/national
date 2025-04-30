@@ -126,16 +126,6 @@ export default function Header() {
               <Search className="h-5 w-5 text-neutral-dark" />
             </button>
             
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="hidden md:inline-flex items-center"
-              onClick={() => window.location.href = user ? "/admin/dashboard" : "/admin/login"}
-            >
-              <UserCog className="h-4 w-4 mr-1" />
-              <span className="text-xs">{user ? "Admin" : "Admin"}</span>
-            </Button>
-            
             {/* Mobile menu button */}
             <button 
               className="md:hidden ml-2 p-2 rounded-full hover:bg-gray-100" 
@@ -196,10 +186,6 @@ export default function Header() {
               </Link>
               <Link href="/contact" className="px-2 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                 Contact
-              </Link>
-              <Link href={user ? "/admin/dashboard" : "/admin/login"} className="px-2 py-2 flex items-center text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
-                <UserCog className="h-4 w-4 mr-2" />
-                <span>{user ? "Admin Dashboard" : "Admin Login"}</span>
               </Link>
             </div>
           </div>
