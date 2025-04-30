@@ -61,7 +61,7 @@ export default function Header() {
           <Link href="/" className="flex items-center">
             <div className="mr-3">
               <img 
-                src="/assets/Logo-nationalfurnitures.jpg" 
+                src={`${import.meta.env.BASE_URL}/logo.jpg`}
                 alt="National Furniture Logo" 
                 className="h-12 w-auto object-contain"
               />

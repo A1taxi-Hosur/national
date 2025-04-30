@@ -63,7 +63,7 @@ export default function AdminLogin() {
               <div className="flex justify-center lg:justify-start">
                 <div className="flex h-20 w-20 items-center justify-center">
                   <img 
-                    src="/assets/Logo-nationalfurnitures.jpg" 
+                    src={`${import.meta.env.BASE_URL}/logo.jpg`}
                     alt="National Furniture Logo" 
                     className="h-20 w-auto object-contain"
                   />
@@ -97,7 +97,7 @@ export default function AdminLogin() {
                           <FormLabel>Username</FormLabel>
                           <FormControl>
                             <Input 
-                              placeholder="nationalfurniture" 
+                              placeholder="admin" 
                               disabled={loginMutation.isPending} 
                               {...field} 
                             />
