@@ -33,7 +33,11 @@ function Router() {
       <ProtectedRoute path="/admin" component={AdminDashboard} />
       <ProtectedRoute path="/admin/dashboard" component={AdminDashboard} />
       <ProtectedRoute path="/admin/products" component={AdminProducts} />
+      <ProtectedRoute path="/admin/products/edit/:id" component={AdminProducts} />
+      <ProtectedRoute path="/admin/products/new" component={AdminProducts} />
       <ProtectedRoute path="/admin/offers" component={AdminOffers} />
+      <ProtectedRoute path="/admin/offers/edit/:id" component={AdminOffers} />
+      <ProtectedRoute path="/admin/offers/new" component={AdminOffers} />
       <ProtectedRoute path="/admin/media" component={AdminMedia} />
       
       {/* Fallback to 404 */}
