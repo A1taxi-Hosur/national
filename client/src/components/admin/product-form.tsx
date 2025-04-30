@@ -35,9 +35,9 @@ interface ProductFormProps {
 const productFormSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-  imageUrl: z.string().url("Please enter a valid image URL"),
+  imageUrl: z.string().min(1, "Image is required"),
   category: z.string().min(1, "Please select a category"),
-  price: z.coerce.number().positive("Price must be a positive number"),
+  price: z.coerce.number().positive("Price must be a positive number").optional(),
   discountedPrice: z.coerce.number().positive("Discounted price must be a positive number").optional(),
   isNew: z.boolean().default(false),
   isFeatured: z.boolean().default(false),

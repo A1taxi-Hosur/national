@@ -22,7 +22,7 @@ export const products = pgTable("products", {
   description: text("description").notNull(),
   imageUrl: text("image_url").notNull(),
   category: text("category").notNull(),
-  price: integer("price").notNull(),
+  price: integer("price"), // Made optional
   discountedPrice: integer("discounted_price"),
   isNew: boolean("is_new").default(false),
   isFeatured: boolean("is_featured").default(false),
@@ -40,8 +40,10 @@ export const offers = pgTable("offers", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description").notNull(),
+  imageUrl: text("image_url").notNull(), // Added image URL field
   expiryDate: timestamp("expiry_date"),
   isActive: boolean("is_active").default(true),
+  isHomeHeader: boolean("is_home_header").default(false), // Added featured in home header field
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
