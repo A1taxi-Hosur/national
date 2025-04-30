@@ -16,7 +16,7 @@ export default function HeroSection({ offer }: HeroSectionProps) {
               Timeless Furniture for Modern Living
             </h1>
             <p className="text-lg md:text-xl mb-6 text-neutral-dark/80">
-              Creating beautiful homes since 1972. Visit our showroom in HSR Layout, Bangalore.
+              Creating beautiful homes for generations. Visit our showroom in HSR Layout, Bangalore.
             </p>
             <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
               <Button asChild size="lg" className="sm:flex-1 md:flex-initial">
