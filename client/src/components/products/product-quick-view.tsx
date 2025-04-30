@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   Dialog, 
   DialogContent, 
@@ -8,7 +8,7 @@ import {
   DialogTitle
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, Phone, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
 import { Product } from "@shared/schema";
 
 interface ProductQuickViewProps {
@@ -22,9 +22,22 @@ export default function ProductQuickView({ product, open, onClose }: ProductQuic
   const [isRotating, setIsRotating] = useState(false);
   const [startX, setStartX] = useState(0);
   
-  // Reset rotation when product changes
+  // Zoom related states
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [viewMode, setViewMode] = useState<'rotate' | 'zoom'>('rotate');
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Reset states when product changes
   useEffect(() => {
     setRotationAngle(0);
+    setZoomLevel(1);
+    setPosition({ x: 0, y: 0 });
+    setIsZoomed(false);
+    setViewMode('rotate');
   }, [product]);
 
   if (!product) return null;
@@ -81,6 +94,122 @@ export default function ProductQuickView({ product, open, onClose }: ProductQuic
     setRotationAngle(prevAngle => prevAngle + 90);
   };
 
+  // Zoom functions
+  const handleZoomIn = () => {
+    setZoomLevel(prev => Math.min(prev + 0.5, 4));
+    setIsZoomed(true);
+  };
+
+  const handleZoomOut = () => {
+    const newZoomLevel = Math.max(zoomLevel - 0.5, 1);
+    setZoomLevel(newZoomLevel);
+    if (newZoomLevel === 1) {
+      setPosition({ x: 0, y: 0 });
+      setIsZoomed(false);
+    }
+  };
+
+  const handleReset = () => {
+    setZoomLevel(1);
+    setPosition({ x: 0, y: 0 });
+    setIsZoomed(false);
+  };
+
+  const handleZoomClick = () => {
+    if (!isDragging) {
+      if (isZoomed) {
+        handleReset();
+      } else {
+        handleZoomIn();
+      }
+    }
+  };
+
+  const handleZoomMouseDown = (e: React.MouseEvent) => {
+    if (zoomLevel > 1) {
+      setIsDragging(true);
+      setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y });
+      e.stopPropagation();
+    }
+  };
+
+  const handleZoomMouseMove = (e: React.MouseEvent) => {
+    if (isDragging && zoomLevel > 1) {
+      const newX = e.clientX - dragStart.x;
+      const newY = e.clientY - dragStart.y;
+      
+      // Calculate bounds to prevent dragging outside of the zoomed image area
+      const container = imageContainerRef.current;
+      if (container) {
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+        const imageWidth = containerWidth * zoomLevel;
+        const imageHeight = containerHeight * zoomLevel;
+        
+        const maxX = (imageWidth - containerWidth) / 2;
+        const maxY = (imageHeight - containerHeight) / 2;
+        
+        setPosition({
+          x: Math.max(Math.min(newX, maxX), -maxX),
+          y: Math.max(Math.min(newY, maxY), -maxY)
+        });
+      }
+      e.stopPropagation();
+    }
+  };
+
+  const handleZoomMouseUp = (e: React.MouseEvent) => {
+    setIsDragging(false);
+    e.stopPropagation();
+  };
+
+  const handleZoomTouchStart = (e: React.TouchEvent) => {
+    if (zoomLevel > 1) {
+      setIsDragging(true);
+      setDragStart({ x: e.touches[0].clientX - position.x, y: e.touches[0].clientY - position.y });
+      e.stopPropagation();
+    }
+  };
+
+  const handleZoomTouchMove = (e: React.TouchEvent) => {
+    if (isDragging && zoomLevel > 1) {
+      const newX = e.touches[0].clientX - dragStart.x;
+      const newY = e.touches[0].clientY - dragStart.y;
+      
+      // Calculate bounds to prevent dragging outside of the zoomed image area
+      const container = imageContainerRef.current;
+      if (container) {
+        const containerWidth = container.offsetWidth;
+        const containerHeight = container.offsetHeight;
+        const imageWidth = containerWidth * zoomLevel;
+        const imageHeight = containerHeight * zoomLevel;
+        
+        const maxX = (imageWidth - containerWidth) / 2;
+        const maxY = (imageHeight - containerHeight) / 2;
+        
+        setPosition({
+          x: Math.max(Math.min(newX, maxX), -maxX),
+          y: Math.max(Math.min(newY, maxY), -maxY)
+        });
+      }
+      e.stopPropagation();
+    }
+  };
+
+  const handleZoomTouchEnd = (e: React.TouchEvent) => {
+    setIsDragging(false);
+    e.stopPropagation();
+  };
+
+  const toggleViewMode = () => {
+    // Reset both modes when switching
+    setRotationAngle(0);
+    setZoomLevel(1);
+    setPosition({ x: 0, y: 0 });
+    setIsZoomed(false);
+    setViewMode(viewMode === 'rotate' ? 'zoom' : 'rotate');
+  };
+
   return (
     <Dialog open={open} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[800px] p-0 overflow-hidden">
@@ -94,37 +223,118 @@ export default function ProductQuickView({ product, open, onClose }: ProductQuic
         
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div 
-              className="product-rotation-view relative h-[400px] bg-gray-50 rounded-lg flex items-center justify-center cursor-move"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            >
-              <img 
-                src={rotationImages[currentImageIndex]} 
-                alt={product.name} 
-                className="max-h-full max-w-full object-contain"
-                style={{ transform: `rotate(${rotationAngle % 360}deg)` }}
-              />
-              
-              <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
-                <Button variant="secondary" size="sm" onClick={rotateLeft}>
-                  <ChevronLeft className="h-4 w-4 mr-1" />
-                  Rotate Left
+            <div className="flex flex-col space-y-2">
+              <div className="flex justify-start space-x-2 mb-2">
+                <Button 
+                  variant={viewMode === 'rotate' ? "default" : "outline"} 
+                  size="sm" 
+                  onClick={() => setViewMode('rotate')}
+                >
+                  360° View
                 </Button>
-                <Button variant="secondary" size="sm" onClick={rotateRight}>
-                  Rotate Right
-                  <ChevronRight className="h-4 w-4 ml-1" />
+                <Button 
+                  variant={viewMode === 'zoom' ? "default" : "outline"} 
+                  size="sm" 
+                  onClick={() => setViewMode('zoom')}
+                >
+                  Zoom View
                 </Button>
               </div>
               
-              <div className="absolute top-2 right-2 bg-white/80 px-2 py-1 rounded text-sm">
-                Drag to rotate 360°
-              </div>
+              {viewMode === 'rotate' ? (
+                <div 
+                  className="product-rotation-view relative h-[400px] bg-gray-50 rounded-lg flex items-center justify-center cursor-move"
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                >
+                  <img 
+                    src={rotationImages[currentImageIndex]} 
+                    alt={product.name} 
+                    className="max-h-full max-w-full object-contain"
+                    style={{ transform: `rotate(${rotationAngle % 360}deg)` }}
+                  />
+                  
+                  <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
+                    <Button variant="secondary" size="sm" onClick={rotateLeft}>
+                      <ChevronLeft className="h-4 w-4 mr-1" />
+                      Rotate Left
+                    </Button>
+                    <Button variant="secondary" size="sm" onClick={rotateRight}>
+                      Rotate Right
+                      <ChevronRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </div>
+                  
+                  <div className="absolute top-2 right-2 bg-white/80 px-2 py-1 rounded text-sm">
+                    Drag to rotate 360°
+                  </div>
+                </div>
+              ) : (
+                <div 
+                  ref={imageContainerRef}
+                  className={`relative h-[400px] bg-gray-50 rounded-lg flex items-center justify-center overflow-hidden ${isZoomed ? 'cursor-move' : 'cursor-zoom-in'}`}
+                  onClick={handleZoomClick}
+                  onMouseDown={handleZoomMouseDown}
+                  onMouseMove={handleZoomMouseMove}
+                  onMouseUp={handleZoomMouseUp}
+                  onMouseLeave={handleZoomMouseUp}
+                  onTouchStart={handleZoomTouchStart}
+                  onTouchMove={handleZoomTouchMove}
+                  onTouchEnd={handleZoomTouchEnd}
+                >
+                  <img 
+                    src={product.imageUrl} 
+                    alt={product.name} 
+                    className="max-h-full max-w-full object-contain transition-transform duration-200"
+                    style={{
+                      transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
+                      transformOrigin: 'center'
+                    }}
+                  />
+                  
+                  {isZoomed && (
+                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white/80 px-2 py-1 rounded text-sm">
+                      {Math.round(zoomLevel * 100)}% - Drag to move
+                    </div>
+                  )}
+                  
+                  <div className="absolute top-4 right-4 flex flex-col gap-2">
+                    <Button
+                      size="icon"
+                      variant="secondary"
+                      className="h-8 w-8 rounded-full bg-white/80 shadow-sm hover:bg-white"
+                      onClick={(e) => { e.stopPropagation(); handleZoomIn(); }}
+                      disabled={zoomLevel >= 4}
+                    >
+                      <ZoomIn className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="secondary"
+                      className="h-8 w-8 rounded-full bg-white/80 shadow-sm hover:bg-white"
+                      onClick={(e) => { e.stopPropagation(); handleZoomOut(); }}
+                      disabled={zoomLevel <= 1}
+                    >
+                      <ZoomOut className="h-4 w-4" />
+                    </Button>
+                    {isZoomed && (
+                      <Button
+                        size="icon"
+                        variant="secondary"
+                        className="h-8 w-8 rounded-full bg-white/80 shadow-sm hover:bg-white"
+                        onClick={(e) => { e.stopPropagation(); handleReset(); }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
             
             <div>
