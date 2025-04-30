@@ -8,7 +8,7 @@ import {
   DialogTitle
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Phone, ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from "lucide-react";
+import { X, Phone, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, ImageIcon } from "lucide-react";
 import { Product } from "@shared/schema";
 
 interface ProductQuickViewProps {
@@ -21,6 +21,10 @@ export default function ProductQuickView({ product, open, onClose }: ProductQuic
   const [rotationAngle, setRotationAngle] = useState(0);
   const [isRotating, setIsRotating] = useState(false);
   const [startX, setStartX] = useState(0);
+  
+  // Image error handling
+  const [imageError, setImageError] = useState(false);
+  const [rotationImageError, setRotationImageError] = useState(false);
   
   // Zoom related states
   const [isZoomed, setIsZoomed] = useState(false);
@@ -38,6 +42,8 @@ export default function ProductQuickView({ product, open, onClose }: ProductQuic
     setPosition({ x: 0, y: 0 });
     setIsZoomed(false);
     setViewMode('rotate');
+    setImageError(false);
+    setRotationImageError(false);
   }, [product]);
 
   if (!product) return null;
@@ -207,6 +213,12 @@ export default function ProductQuickView({ product, open, onClose }: ProductQuic
     setZoomLevel(1);
     setPosition({ x: 0, y: 0 });
     setIsZoomed(false);
+    // Reset image error states when toggling view
+    if (viewMode === 'rotate') {
+      setImageError(false);
+    } else {
+      setRotationImageError(false);
+    }
     setViewMode(viewMode === 'rotate' ? 'zoom' : 'rotate');
   };
 
@@ -252,12 +264,20 @@ export default function ProductQuickView({ product, open, onClose }: ProductQuic
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
                 >
-                  <img 
-                    src={rotationImages[currentImageIndex]} 
-                    alt={product.name} 
-                    className="max-h-full max-w-full object-contain"
-                    style={{ transform: `rotate(${rotationAngle % 360}deg)` }}
-                  />
+                  {!rotationImageError ? (
+                    <img 
+                      src={rotationImages[currentImageIndex]} 
+                      alt={product.name} 
+                      className="max-h-full max-w-full object-contain"
+                      style={{ transform: `rotate(${rotationAngle % 360}deg)` }}
+                      onError={() => setRotationImageError(true)}
+                    />
+                  ) : (
+                    <div className="text-center">
+                      <ImageIcon className="h-16 w-16 text-gray-300 mx-auto mb-2" />
+                      <p className="text-sm text-gray-400 max-w-xs text-center">{product.name}</p>
+                    </div>
+                  )}
                   
                   <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4">
                     <Button variant="secondary" size="sm" onClick={rotateLeft}>
@@ -287,15 +307,23 @@ export default function ProductQuickView({ product, open, onClose }: ProductQuic
                   onTouchMove={handleZoomTouchMove}
                   onTouchEnd={handleZoomTouchEnd}
                 >
-                  <img 
-                    src={product.imageUrl} 
-                    alt={product.name} 
-                    className="max-h-full max-w-full object-contain transition-transform duration-200"
-                    style={{
-                      transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
-                      transformOrigin: 'center'
-                    }}
-                  />
+                  {!imageError && product.imageUrl ? (
+                    <img 
+                      src={product.imageUrl} 
+                      alt={product.name} 
+                      className="max-h-full max-w-full object-contain transition-transform duration-200"
+                      style={{
+                        transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
+                        transformOrigin: 'center'
+                      }}
+                      onError={() => setImageError(true)}
+                    />
+                  ) : (
+                    <div className="text-center">
+                      <ImageIcon className="h-16 w-16 text-gray-300 mx-auto mb-2" />
+                      <p className="text-sm text-gray-400 max-w-xs text-center">{product.name}</p>
+                    </div>
+                  )}
                   
                   {isZoomed && (
                     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white/80 px-2 py-1 rounded text-sm">
