@@ -2,7 +2,6 @@ import { Link } from "wouter";
 import { Phone, Mail, MapPin, Facebook, Instagram, ExternalLink, UserCog } from "lucide-react";
 import { getPlaceData, getDirectionsUrl, formatPhoneNumber } from "@/lib/google-maps";
 import { useAuth } from "@/hooks/use-auth";
-import { FaGlobe } from "react-icons/fa";
 
 export default function Footer() {
   const placeData = getPlaceData();
@@ -28,8 +27,12 @@ export default function Footer() {
                 rel="noopener noreferrer" 
                 className="text-white/80 hover:text-white transition"
               >
-                <FaGlobe className="h-6 w-6" />
-                <span className="sr-only">JustDial</span>
+                <img 
+                  src="/justdial.webp" 
+                  alt="JustDial" 
+                  className="h-6 w-auto"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
               </a>
             </div>
           </div>
