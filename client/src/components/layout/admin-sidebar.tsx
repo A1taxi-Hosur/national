@@ -53,10 +53,14 @@ export default function AdminSidebar() {
           <div className="space-y-1">
             <Link href="/admin/dashboard">
               <Button 
-                variant={isActive("/admin/dashboard") ? "default" : "secondary"} 
-                className="w-full justify-start bg-secondary/50 hover:bg-secondary/70 font-medium"
+                variant="secondary"
+                className={`w-full justify-start font-medium ${
+                  isActive("/admin/dashboard") 
+                    ? "bg-primary text-white hover:bg-primary/90" 
+                    : "bg-secondary/70 hover:bg-secondary/90"
+                }`}
               >
-                <PackageOpen className="mr-2 h-4 w-4 text-primary" />
+                <PackageOpen className={`mr-2 h-4 w-4 ${isActive("/admin/dashboard") ? "text-white" : "text-primary"}`} />
                 Manage Products & Offers
               </Button>
             </Link>

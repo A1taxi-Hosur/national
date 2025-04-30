@@ -148,13 +148,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid product ID" });
       }
       
-      const deleted = await storage.deleteProduct(id);
-      if (!deleted) {
+      // First check if the product exists
+      const product = await storage.getProduct(id);
+      if (!product) {
+        console.log(`Product with ID ${id} not found when trying to delete.`);
         return res.status(404).json({ message: "Product not found" });
       }
       
-      res.status(204).send();
+      // Attempt to delete
+      const deleted = await storage.deleteProduct(id);
+      console.log(`Delete result for product ${id}: ${deleted}`);
+      
+      if (!deleted) {
+        return res.status(500).json({ message: "Failed to delete product" });
+      }
+      
+      res.status(200).json({ message: "Product deleted successfully" });
     } catch (error) {
+      console.error("Error deleting product:", error);
       res.status(500).json({ message: "Failed to delete product" });
     }
   });
@@ -213,13 +224,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid offer ID" });
       }
       
-      const deleted = await storage.deleteOffer(id);
-      if (!deleted) {
+      // First check if the offer exists
+      const offer = await storage.getOffer(id);
+      if (!offer) {
+        console.log(`Offer with ID ${id} not found when trying to delete.`);
         return res.status(404).json({ message: "Offer not found" });
       }
       
-      res.status(204).send();
+      // Attempt to delete
+      const deleted = await storage.deleteOffer(id);
+      console.log(`Delete result for offer ${id}: ${deleted}`);
+      
+      if (!deleted) {
+        return res.status(500).json({ message: "Failed to delete offer" });
+      }
+      
+      res.status(200).json({ message: "Offer deleted successfully" });
     } catch (error) {
+      console.error("Error deleting offer:", error);
       res.status(500).json({ message: "Failed to delete offer" });
     }
   });

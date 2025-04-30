@@ -284,7 +284,21 @@ export class MemStorage implements IStorage {
   }
 
   async deleteProduct(id: number): Promise<boolean> {
-    return this.products.delete(id);
+    console.log(`Attempting to delete product with ID: ${id}`);
+    console.log(`Current products before deletion: ${Array.from(this.products.keys()).join(', ')}`);
+    
+    // Make sure the ID exists
+    if (!this.products.has(id)) {
+      console.log(`Product ID ${id} not found in storage`);
+      return false;
+    }
+    
+    // Delete the product
+    const result = this.products.delete(id);
+    console.log(`Delete result: ${result}`);
+    console.log(`Products after deletion: ${Array.from(this.products.keys()).join(', ')}`);
+    
+    return result;
   }
 
   // Offer methods
@@ -335,7 +349,21 @@ export class MemStorage implements IStorage {
   }
 
   async deleteOffer(id: number): Promise<boolean> {
-    return this.offers.delete(id);
+    console.log(`Attempting to delete offer with ID: ${id}`);
+    console.log(`Current offers before deletion: ${Array.from(this.offers.keys()).join(', ')}`);
+    
+    // Make sure the ID exists
+    if (!this.offers.has(id)) {
+      console.log(`Offer ID ${id} not found in storage`);
+      return false;
+    }
+    
+    // Delete the offer
+    const result = this.offers.delete(id);
+    console.log(`Delete result: ${result}`);
+    console.log(`Offers after deletion: ${Array.from(this.offers.keys()).join(', ')}`);
+    
+    return result;
   }
 
   // Media methods

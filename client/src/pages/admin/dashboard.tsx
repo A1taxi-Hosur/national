@@ -83,14 +83,28 @@ export default function AdminDashboard() {
     if (!confirm("Are you sure you want to delete this product?")) return;
     
     try {
-      await apiRequest("DELETE", `/api/products/${id}`);
-      queryClient.invalidateQueries({queryKey: ["/api/products"]});
-      queryClient.invalidateQueries({queryKey: ["/api/admin/stats"]});
-      toast({
-        title: "Product deleted",
-        description: "The product has been successfully deleted.",
-      });
+      const response = await apiRequest("DELETE", `/api/products/${id}`);
+      
+      // Check if the response was successful
+      if (response.status === 204 || response.ok) {
+        // Only invalidate the queries if the server successfully deleted the product
+        queryClient.invalidateQueries({queryKey: ["/api/products"]});
+        queryClient.invalidateQueries({queryKey: ["/api/admin/stats"]});
+        
+        toast({
+          title: "Product deleted",
+          description: "The product has been successfully deleted.",
+        });
+        
+        // Force refresh products
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else {
+        throw new Error("Failed to delete product. Server returned: " + response.status);
+      }
     } catch (error: any) {
+      console.error("Delete product error:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to delete product.",
@@ -104,14 +118,28 @@ export default function AdminDashboard() {
     if (!confirm("Are you sure you want to delete this offer?")) return;
     
     try {
-      await apiRequest("DELETE", `/api/offers/${id}`);
-      queryClient.invalidateQueries({queryKey: ["/api/offers"]});
-      queryClient.invalidateQueries({queryKey: ["/api/admin/stats"]});
-      toast({
-        title: "Offer deleted",
-        description: "The offer has been successfully deleted.",
-      });
+      const response = await apiRequest("DELETE", `/api/offers/${id}`);
+      
+      // Check if the response was successful
+      if (response.status === 204 || response.ok) {
+        // Only invalidate the queries if the server successfully deleted the offer
+        queryClient.invalidateQueries({queryKey: ["/api/offers"]});
+        queryClient.invalidateQueries({queryKey: ["/api/admin/stats"]});
+        
+        toast({
+          title: "Offer deleted",
+          description: "The offer has been successfully deleted.",
+        });
+        
+        // Force refresh products
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else {
+        throw new Error("Failed to delete offer. Server returned: " + response.status);
+      }
     } catch (error: any) {
+      console.error("Delete offer error:", error);
       toast({
         title: "Error",
         description: error.message || "Failed to delete offer.",
