@@ -68,7 +68,7 @@ export default function Header() {
               />
             </div>
             <div>
-              <h1 className="text-xl md:text-2xl font-bold font-heading text-primary">NATIONAL FURNITURE</h1>
+              <h1 className="text-xl md:text-2xl font-bold font-heading text-primary">NATIONAL FURNITURE & INTERIORS</h1>
               <p className="text-xs text-gray-600">ESTABLISHED 1972</p>
             </div>
           </Link>

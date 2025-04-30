@@ -22,7 +22,7 @@ export default function CategorySection() {
     {
       name: "Dining",
       description: "Stunning dining tables and chairs for memorable meals",
-      image: "https://images.unsplash.com/photo-1651768363297-6ff7e81ca57d?auto=format&fit=crop&q=80&w=800"
+      image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&q=80&w=800"
     }
   ];
 
