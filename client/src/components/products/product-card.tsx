@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, Send, Eye, ImageIcon } from "lucide-react";
+import { Heart, Send, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@shared/schema";
@@ -13,27 +13,15 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
 
-  const [imageError, setImageError] = useState(false);
-
   return (
     <>
       <div className="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
         <div className="relative group">
-          {!imageError && product.imageUrl ? (
-            <img 
-              src={product.imageUrl} 
-              alt={product.name} 
-              className="w-full h-56 object-cover"
-              onError={() => setImageError(true)}
-            />
-          ) : (
-            <div className="w-full h-56 bg-gray-100 flex items-center justify-center">
-              <div className="text-center">
-                <ImageIcon className="h-12 w-12 text-gray-300 mx-auto mb-2" />
-                <p className="text-sm text-gray-400">{product.name}</p>
-              </div>
-            </div>
-          )}
+          <img 
+            src={product.imageUrl} 
+            alt={product.name} 
+            className="w-full h-56 object-cover"
+          />
           {product.isNew && (
             <div className="absolute top-2 right-2">
               <Badge className="bg-accent text-white">NEW</Badge>

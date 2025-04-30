@@ -2,12 +2,9 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Express } from "express";
 import session from "express-session";
-import { scrypt, randomBytes, timingSafeEqual } from "crypto";
-import { promisify } from "util";
+import { compare, hash } from "bcrypt";
 import { storage } from "./storage";
 import { User as SelectUser } from "@shared/schema";
-
-const scryptAsync = promisify(scrypt);
 
 declare global {
   namespace Express {
@@ -30,25 +27,6 @@ export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  // Helper functions for password encryption
-  async function hashPassword(password: string) {
-    const salt = randomBytes(16).toString("hex");
-    const buf = (await scryptAsync(password, salt, 64)) as Buffer;
-    return `${buf.toString("hex")}.${salt}`;
-  }
-
-  async function comparePasswords(supplied: string, stored: string) {
-    // Handle plaintext passwords from the setup script
-    if (!stored.includes(".")) {
-      return supplied === stored;
-    }
-    
-    const [hashed, salt] = stored.split(".");
-    const hashedBuf = Buffer.from(hashed, "hex");
-    const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
-    return timingSafeEqual(hashedBuf, suppliedBuf);
-  }
-
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       try {
@@ -57,7 +35,10 @@ export function setupAuth(app: Express) {
           return done(null, false, { message: "Invalid username or password" });
         }
 
-        const passwordMatches = await comparePasswords(password, user.password);
+        // Check if password starts with $2b$ which means it's already hashed
+        const passwordMatches = user.password.startsWith("$2b$") 
+          ? await compare(password, user.password)
+          : password === user.password;
 
         if (passwordMatches) {
           return done(null, user);
@@ -130,7 +111,7 @@ export function setupAuth(app: Express) {
       }
       
       // Hash password
-      const hashedPassword = await hashPassword(password);
+      const hashedPassword = await hash(password, 10);
       
       // Create user
       const user = await storage.createUser({
