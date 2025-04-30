@@ -120,6 +120,46 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
+        
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold font-heading text-primary mb-3">Our Clients</h2>
+              <p className="text-neutral-dark/70 max-w-2xl mx-auto">
+                Trusted by prestigious institutions and businesses across India
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 items-center">
+              <div className="flex justify-center items-center p-6 h-28 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30">
+                <div className="text-center font-bold text-lg text-neutral-dark">GITAM <span className="text-primary">UNIVERSITY</span></div>
+              </div>
+              
+              <div className="flex justify-center items-center p-6 h-28 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30">
+                <div className="text-center font-bold text-lg text-neutral-dark">OLIVE <span className="text-primary">CAFE</span></div>
+              </div>
+              
+              <div className="flex justify-center items-center p-6 h-28 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30">
+                <div className="text-center font-bold text-lg text-neutral-dark">CLEAR<span className="text-primary">TAX</span></div>
+              </div>
+              
+              <div className="flex justify-center items-center p-6 h-28 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30">
+                <div className="text-center font-bold text-lg text-neutral-dark">AMR <span className="text-primary">TECHPARK</span></div>
+              </div>
+              
+              <div className="flex justify-center items-center p-6 h-28 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30">
+                <div className="text-center font-bold text-lg text-neutral-dark">SAMOSA <span className="text-primary">PARTY</span></div>
+              </div>
+            </div>
+            
+            <div className="text-center mt-12">
+              <p className="text-neutral-dark/70">
+                We've had the privilege of furnishing offices, educational institutions, restaurants, and commercial spaces across India.
+                Our corporate clients trust us for quality, reliability, and exceptional service.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
       
       <Footer />
