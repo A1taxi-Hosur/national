@@ -1,7 +1,10 @@
 import { Link } from "wouter";
-import { Phone, Mail, MapPin, Facebook, Instagram, Twitter } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, ExternalLink } from "lucide-react";
+import { getPlaceData, getDirectionsUrl, formatPhoneNumber } from "@/lib/google-maps";
 
 export default function Footer() {
+  const placeData = getPlaceData();
+  
   return (
     <footer className="bg-accent text-white py-12">
       <div className="container mx-auto px-4">
@@ -26,23 +29,23 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/">
-                  <a className="text-white/80 hover:text-white transition">Home</a>
+                <Link href="/" className="text-white/80 hover:text-white transition">
+                  Home
                 </Link>
               </li>
               <li>
-                <Link href="/products">
-                  <a className="text-white/80 hover:text-white transition">Products</a>
+                <Link href="/products" className="text-white/80 hover:text-white transition">
+                  Products
                 </Link>
               </li>
               <li>
-                <Link href="/about">
-                  <a className="text-white/80 hover:text-white transition">About Us</a>
+                <Link href="/about" className="text-white/80 hover:text-white transition">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact">
-                  <a className="text-white/80 hover:text-white transition">Contact</a>
+                <Link href="/contact" className="text-white/80 hover:text-white transition">
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -52,28 +55,28 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-4">Product Categories</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/products/Living Room">
-                  <a className="text-white/80 hover:text-white transition">Living Room</a>
+                <Link href="/products/Living Room" className="text-white/80 hover:text-white transition">
+                  Living Room
                 </Link>
               </li>
               <li>
-                <Link href="/products/Bedroom">
-                  <a className="text-white/80 hover:text-white transition">Bedroom</a>
+                <Link href="/products/Bedroom" className="text-white/80 hover:text-white transition">
+                  Bedroom
                 </Link>
               </li>
               <li>
-                <Link href="/products/Dining">
-                  <a className="text-white/80 hover:text-white transition">Dining</a>
+                <Link href="/products/Dining" className="text-white/80 hover:text-white transition">
+                  Dining
                 </Link>
               </li>
               <li>
-                <Link href="/products/Office">
-                  <a className="text-white/80 hover:text-white transition">Office</a>
+                <Link href="/products/Office" className="text-white/80 hover:text-white transition">
+                  Office
                 </Link>
               </li>
               <li>
-                <Link href="/products/Decor">
-                  <a className="text-white/80 hover:text-white transition">Decor</a>
+                <Link href="/products/Decor" className="text-white/80 hover:text-white transition">
+                  Decor
                 </Link>
               </li>
             </ul>
@@ -85,13 +88,27 @@ export default function Footer() {
               <div className="flex items-start mb-2">
                 <MapPin className="h-5 w-5 mr-2 mt-1 flex-shrink-0" />
                 <div>
-                  <p>National Furniture,</p>
-                  <p>#123, 5th Main Road, HSR Layout, Sector 3, Bangalore, Karnataka 560102</p>
+                  <p>{placeData.name}</p>
+                  <p>{placeData.formatted_address}</p>
+                  <a 
+                    href={getDirectionsUrl(placeData.formatted_address)}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-white/80 hover:text-white transition inline-flex items-center mt-1"
+                  >
+                    <span className="mr-1 text-sm">Get directions</span>
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
                 </div>
               </div>
               <div className="flex items-center mb-2">
                 <Phone className="h-5 w-5 mr-2 flex-shrink-0" />
-                <p>+91 80 2663 4455</p>
+                <a 
+                  href={`tel:${placeData.international_phone_number.replace(/\s/g, '')}`}
+                  className="text-white/80 hover:text-white transition"
+                >
+                  {formatPhoneNumber(placeData.formatted_phone_number)}
+                </a>
               </div>
               <div className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 flex-shrink-0" />

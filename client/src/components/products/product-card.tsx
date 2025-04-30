@@ -1,4 +1,4 @@
-import { Heart } from "lucide-react";
+import { Heart, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Product } from "@shared/schema";
@@ -32,14 +32,9 @@ export default function ProductCard({ product }: ProductCardProps) {
         <h3 className="font-heading font-bold text-lg mb-1">{product.name}</h3>
         <p className="text-neutral-dark/70 text-sm mb-2">{product.category}</p>
         
-        {product.discountedPrice ? (
-          <div className="flex items-center mb-3">
-            <p className="text-primary font-bold">₹{product.discountedPrice}</p>
-            <p className="text-neutral-dark/50 line-through text-sm ml-2">₹{product.price}</p>
-          </div>
-        ) : (
-          <p className="text-primary font-bold mb-3">₹{product.price}</p>
-        )}
+        <div className="h-5 mb-3">
+          {/* Price information removed as requested */}
+        </div>
         
         <div className="flex justify-between items-center">
           <Link href={`/product/${product.id}`}>
