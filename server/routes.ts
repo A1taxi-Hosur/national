@@ -148,6 +148,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid product ID" });
       }
       
+      console.log(`Received DELETE request for product ID: ${id}`);
+      
       // First check if the product exists
       const product = await storage.getProduct(id);
       if (!product) {
@@ -155,15 +157,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Product not found" });
       }
       
-      // Attempt to delete
-      const deleted = await storage.deleteProduct(id);
-      console.log(`Delete result for product ${id}: ${deleted}`);
+      console.log(`Found product to delete:`, product);
+      
+      // Attempt to delete - force numeric ID conversion
+      const numericId = Number(id);
+      const deleted = await storage.deleteProduct(numericId);
+      console.log(`Delete result for product ${numericId}: ${deleted}`);
       
       if (!deleted) {
         return res.status(500).json({ message: "Failed to delete product" });
       }
       
-      res.status(200).json({ message: "Product deleted successfully" });
+      // Double check that the product is actually gone
+      const checkDeleted = await storage.getProduct(numericId);
+      console.log(`After deletion, product ${numericId} exists:`, !!checkDeleted);
+      
+      res.status(200).json({ message: "Product deleted successfully", success: true });
     } catch (error) {
       console.error("Error deleting product:", error);
       res.status(500).json({ message: "Failed to delete product" });
@@ -224,6 +233,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid offer ID" });
       }
       
+      console.log(`Received DELETE request for offer ID: ${id}`);
+      
       // First check if the offer exists
       const offer = await storage.getOffer(id);
       if (!offer) {
@@ -231,15 +242,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Offer not found" });
       }
       
-      // Attempt to delete
-      const deleted = await storage.deleteOffer(id);
-      console.log(`Delete result for offer ${id}: ${deleted}`);
+      console.log(`Found offer to delete:`, offer);
+      
+      // Attempt to delete - force numeric ID conversion
+      const numericId = Number(id);
+      const deleted = await storage.deleteOffer(numericId);
+      console.log(`Delete result for offer ${numericId}: ${deleted}`);
       
       if (!deleted) {
         return res.status(500).json({ message: "Failed to delete offer" });
       }
       
-      res.status(200).json({ message: "Offer deleted successfully" });
+      // Double check that the offer is actually gone
+      const checkDeleted = await storage.getOffer(numericId);
+      console.log(`After deletion, offer ${numericId} exists:`, !!checkDeleted);
+      
+      res.status(200).json({ message: "Offer deleted successfully", success: true });
     } catch (error) {
       console.error("Error deleting offer:", error);
       res.status(500).json({ message: "Failed to delete offer" });

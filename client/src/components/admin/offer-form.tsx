@@ -99,7 +99,8 @@ export default function OfferForm({ offer, onSuccess }: OfferFormProps) {
       description: offer.description,
       imageUrl: offer.imageUrl || "",
       expiryDate: offer.expiryDate ? new Date(offer.expiryDate) : undefined,
-      isActive: offer.isActive,
+      // Make sure isActive is a boolean, not null
+      isActive: offer.isActive === null ? false : Boolean(offer.isActive),
       isHomeHeader: offer.isHomeHeader || false,
     } : {
       title: "",
