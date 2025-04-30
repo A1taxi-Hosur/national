@@ -23,6 +23,11 @@ export default function CategorySection() {
       name: "Dining",
       description: "Stunning dining tables and chairs for memorable meals",
       image: "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&q=80&w=800"
+    },
+    {
+      name: "Interior Design",
+      description: "Professional design services to transform your living spaces",
+      image: "https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&q=80&w=800"
     }
   ];
 
