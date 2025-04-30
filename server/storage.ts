@@ -91,10 +91,10 @@ export class MemStorage implements IStorage {
       checkPeriod: 86400000 // prune expired entries every 24h
     });
 
-    // Create initial admin user with simple admin credentials
+    // Create initial admin user with plain password (will be used directly)
     this.createUser({
       username: "admin",
-      password: "$2b$10$8MzOS5JBQe6aadxwQLzvAO22.zAQUJIZKL22BZAX9Q1J0H6x3KPM.", // "password"
+      password: "password", // Direct password
     }).then(user => {
       // Update user to be admin
       const adminUser = { ...user, isAdmin: true };

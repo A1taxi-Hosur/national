@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     error,
     isLoading,
   } = useQuery<User | undefined, Error>({
-    queryKey: ["/api/user"],
+    queryKey: ["/api/me"],
     queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (user: User) => {
-      queryClient.setQueryData(["/api/user"], user);
+      queryClient.setQueryData(["/api/me"], user);
       toast({
         title: "Login successful",
         description: `Welcome back, ${user.username}!`,
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (user: User) => {
-      queryClient.setQueryData(["/api/user"], user);
+      queryClient.setQueryData(["/api/me"], user);
       toast({
         title: "Registration successful",
         description: `Welcome, ${user.username}!`,
@@ -88,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await apiRequest("POST", "/api/logout");
     },
     onSuccess: () => {
-      queryClient.setQueryData(["/api/user"], null);
+      queryClient.setQueryData(["/api/me"], null);
       toast({
         title: "Logged out successfully",
       });
@@ -115,7 +115,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     >
       {children}
     </AuthContext.Provider>
-  ) as JSX.Element;
+  );
 }
 
 export function useAuth() {
