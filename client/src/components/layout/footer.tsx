@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Phone, Mail, MapPin, Facebook, Instagram, ExternalLink, UserCog } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, ExternalLink, UserCog, Youtube } from "lucide-react";
 import { getPlaceData, getDirectionsUrl, formatPhoneNumber } from "@/lib/google-maps";
 import { useAuth } from "@/hooks/use-auth";
 import justdialLogo from "@assets/justdial.webp";
@@ -19,8 +19,11 @@ export default function Footer() {
               <a href="https://www.facebook.com/nationalfurnitureandinteriors/" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition">
                 <Facebook className="h-6 w-6" />
               </a>
-              <a href="#" className="text-white/80 hover:text-white transition">
+              <a href="https://www.instagram.com/nationalfurnitureinterior/" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition">
                 <Instagram className="h-6 w-6" />
+              </a>
+              <a href="https://www.youtube.com/@sibgathsibgath1065" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition">
+                <Youtube className="h-6 w-6" />
               </a>
               <a 
                 href="https://www.justdial.com/jdmart/Bangalore/National-Furniture-Interiors-Opposite-to-Purva-Fairmount-Hsr-Layout-Sector-2/080PXX80-XX80-161203142958-H2Z7_BZDET/catalogue" 
