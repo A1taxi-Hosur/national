@@ -4,6 +4,7 @@ import { Menu, Search, X, ChevronDown, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import logoImage from "../../assets/national-furniture-logo.png";
+import logoIcon from "../../assets/national-furniture-icon.png";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -60,11 +61,18 @@ export default function Header() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center">
+            <div className="mr-4">
+              <img 
+                src={logoIcon}
+                alt="National Furniture Icon" 
+                className="h-16 w-auto object-contain"
+              />
+            </div>
             <div>
               <img 
                 src={logoImage}
                 alt="National Furniture & Interiors" 
-                className="h-20 w-auto object-contain"
+                className="h-16 w-auto object-contain"
               />
             </div>
           </Link>
