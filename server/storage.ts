@@ -182,6 +182,22 @@ export class MemStorage implements IStorage {
         price: 89999,
         isFeatured: true,
         status: "active"
+      },
+      {
+        name: "Hotel Reception Desk",
+        description: "Modern reception counter with built-in storage and cable management.",
+        imageUrl: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=900",
+        category: "Hotel Furniture",
+        price: 124999,
+        status: "active"
+      },
+      {
+        name: "Hotel Lobby Sofa",
+        description: "Elegant and durable lobby seating solution for hospitality spaces.",
+        imageUrl: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&q=80&w=900",
+        category: "Hotel Furniture",
+        price: 78500,
+        status: "active"
       }
     ];
 

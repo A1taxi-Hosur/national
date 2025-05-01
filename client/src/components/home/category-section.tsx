@@ -27,7 +27,7 @@ export default function CategorySection() {
     {
       name: "Hotel Furniture",
       description: "Premium quality furniture solutions for hotels and hospitality",
-      image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&q=80&w=800"
+      image: "https://images.unsplash.com/photo-1571508601891-ca5e7a713859?auto=format&fit=crop&q=80&w=800"
     },
     {
       name: "Interior Design",
