@@ -3,7 +3,7 @@ import { Link, useLocation } from "wouter";
 import { Menu, Search, X, ChevronDown, UserCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
-import logoImage from "../../assets/logo-new.png";
+import logoImage from "../../assets/national-furniture-logo.png";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -60,16 +60,12 @@ export default function Header() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <div className="mr-4">
+            <div>
               <img 
                 src={logoImage}
-                alt="National Furniture Logo" 
-                className="h-16 w-auto object-contain shadow-sm"
+                alt="National Furniture & Interiors" 
+                className="h-20 w-auto object-contain"
               />
-            </div>
-            <div>
-              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold font-heading text-primary tracking-tight">NATIONAL FURNITURE & INTERIORS</h1>
-
             </div>
           </Link>
           

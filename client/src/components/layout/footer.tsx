@@ -2,7 +2,8 @@ import { Link } from "wouter";
 import { Phone, Mail, MapPin, Facebook, Instagram, ExternalLink, UserCog, Youtube } from "lucide-react";
 import { getPlaceData, getDirectionsUrl, formatPhoneNumber } from "@/lib/google-maps";
 import { useAuth } from "@/hooks/use-auth";
-import justdialLogo from "@assets/justdial.webp";
+import justdialLogo from "../../assets/justdial.webp";
+import nationalFurnitureLogo from "../../assets/national-furniture-logo.png";
 
 export default function Footer() {
   const placeData = getPlaceData();
@@ -13,7 +14,12 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold font-heading mb-4">NATIONAL FURNITURE & INTERIORS</h3>
+            <img 
+              src={nationalFurnitureLogo} 
+              alt="National Furniture & Interiors"
+              className="h-12 w-auto object-contain mb-4"
+              style={{ filter: 'brightness(0) invert(1)' }}
+            />
             <p className="text-white/80 mb-4">CREATING BEAUTIFUL HOMES FOR GENERATIONS. Visit our showroom in HSR Layout, Bangalore.</p>
             <div className="flex space-x-4">
               <a href="https://www.facebook.com/nationalfurnitureandinteriors/" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white transition">
