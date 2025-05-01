@@ -108,6 +108,12 @@ export default function Header() {
                     <Link href="/products/Decor" className="block px-4 py-2 text-sm text-neutral-dark hover:bg-primary hover:text-white" role="menuitem">
                       Decor
                     </Link>
+                    <Link href="/products/Hotel Furniture" className="block px-4 py-2 text-sm text-neutral-dark hover:bg-primary hover:text-white" role="menuitem">
+                      Hotel Furniture
+                    </Link>
+                    <Link href="/products/Restaurant Furniture" className="block px-4 py-2 text-sm text-neutral-dark hover:bg-primary hover:text-white" role="menuitem">
+                      Restaurant Furniture
+                    </Link>
                   </div>
                 </div>
               )}
@@ -176,6 +182,12 @@ export default function Header() {
                     </Link>
                     <Link href="/products/Decor" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                       Decor
+                    </Link>
+                    <Link href="/products/Hotel Furniture" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                      Hotel Furniture
+                    </Link>
+                    <Link href="/products/Restaurant Furniture" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                      Restaurant Furniture
                     </Link>
                   </div>
                 )}

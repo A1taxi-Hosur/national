@@ -13,12 +13,12 @@ export default function AboutPage() {
               <div className="order-2 md:order-1">
                 <h2 className="text-3xl font-bold font-heading text-primary mb-6">Our Story</h2>
                 <p className="text-neutral-dark/80 mb-4">
-                  National Furniture began as a small family-owned workshop in Bangalore two decades ago. 
+                  National Furniture began as a small family-owned workshop in Bangalore over 15 years ago. 
                   What started as a passion for crafting quality wooden furniture has evolved into one of the 
                   most trusted furniture retailers in the region.
                 </p>
                 <p className="text-neutral-dark/80 mb-4">
-                  For over 20 years, we have stayed true to our founding principles: exceptional craftsmanship, 
+                  For over 15 years, we have stayed true to our founding principles: exceptional craftsmanship, 
                   sustainable materials, and designs that stand the test of time. Our furniture pieces aren't 
                   just functional items – they're heirlooms that tell stories across generations.
                 </p>
@@ -29,7 +29,7 @@ export default function AboutPage() {
                 </p>
                 <div className="flex items-center space-x-6">
                   <div>
-                    <p className="text-4xl font-bold text-primary">20+</p>
+                    <p className="text-4xl font-bold text-primary">15+</p>
                     <p className="text-neutral-dark/70">Years of Excellence</p>
                   </div>
                   <div>
