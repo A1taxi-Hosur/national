@@ -13,10 +13,6 @@ interface HeroSectionProps {
 // Array of furniture showcase images for the carousel
 const carouselImages = [
   {
-    src: "https://images.unsplash.com/photo-1540574163026-643ea20ade25?auto=format&fit=crop&q=80&w=1000",
-    alt: "Modern Living Room Setup"
-  },
-  {
     src: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&q=80&w=1000",
     alt: "Contemporary Dining Area"
   },
@@ -25,16 +21,20 @@ const carouselImages = [
     alt: "Luxury Bedroom Furniture"
   },
   {
-    src: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?auto=format&fit=crop&q=80&w=1000",
-    alt: "Modern Sofa Design"
+    src: "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?auto=format&fit=crop&q=80&w=1000",
+    alt: "Designer Living Space"
   },
   {
     src: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?auto=format&fit=crop&q=80&w=1000",
     alt: "Minimalist Home Office"
   },
   {
-    src: "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?auto=format&fit=crop&q=80&w=1000",
-    alt: "Designer Living Space"
+    src: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=80&w=1000",
+    alt: "Elegant Bedroom Design"
+  },
+  {
+    src: "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&q=80&w=1000",
+    alt: "Luxury Dining Collection"
   }
 ];
 
