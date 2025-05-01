@@ -107,7 +107,7 @@ export class MemStorage implements IStorage {
 
   private async createInitialData() {
     // Sample categories
-    const categories = ['Living Room', 'Bedroom', 'Dining', 'Office', 'Decor'];
+    const categories = ['Living Room', 'Bedroom', 'Dining', 'Office', 'Decor & Interior'];
     
     // Sample products
     const sampleProducts: InsertProduct[] = [
@@ -163,6 +163,15 @@ export class MemStorage implements IStorage {
         imageUrl: "https://images.unsplash.com/photo-1544457070-4cd773b4d71e?auto=format&fit=crop&q=80&w=800",
         category: "Living Room",
         price: 18999,
+        status: "active"
+      },
+      {
+        name: "Elegant Wall Art",
+        description: "Contemporary wall art piece to enhance your interior design.",
+        imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900",
+        category: "Decor & Interior",
+        price: 12499,
+        isFeatured: true,
         status: "active"
       }
     ];
@@ -249,10 +258,10 @@ export class MemStorage implements IStorage {
       category: product.category,
       imageUrl: product.imageUrl,
       price: product.price,
-      discountedPrice: product.discountedPrice ?? null,
-      isNew: product.isNew ?? null,
-      isFeatured: product.isFeatured ?? null,
-      status: product.status ?? null,
+      discountedPrice: product.discountedPrice || null,
+      isNew: product.isNew || null,
+      isFeatured: product.isFeatured || null,
+      status: product.status || null,
       createdAt: now
     };
     this.products.set(id, newProduct);
@@ -267,15 +276,15 @@ export class MemStorage implements IStorage {
 
     const updatedProduct: Product = {
       id,
-      name: product.name ?? existingProduct.name,
-      description: product.description ?? existingProduct.description,
-      category: product.category ?? existingProduct.category,
-      imageUrl: product.imageUrl ?? existingProduct.imageUrl,
-      price: product.price ?? existingProduct.price,
-      discountedPrice: product.discountedPrice ?? existingProduct.discountedPrice,
-      isNew: product.isNew ?? existingProduct.isNew,
-      isFeatured: product.isFeatured ?? existingProduct.isFeatured,
-      status: product.status ?? existingProduct.status,
+      name: product.name || existingProduct.name,
+      description: product.description || existingProduct.description,
+      category: product.category || existingProduct.category,
+      imageUrl: product.imageUrl || existingProduct.imageUrl,
+      price: product.price || existingProduct.price,
+      discountedPrice: product.discountedPrice || existingProduct.discountedPrice,
+      isNew: product.isNew || existingProduct.isNew,
+      isFeatured: product.isFeatured || existingProduct.isFeatured,
+      status: product.status || existingProduct.status,
       createdAt: existingProduct.createdAt
     };
     
@@ -323,9 +332,9 @@ export class MemStorage implements IStorage {
       title: offer.title,
       description: offer.description,
       imageUrl: offer.imageUrl,
-      expiryDate: offer.expiryDate ?? null,
-      isActive: offer.isActive ?? null,
-      isHomeHeader: offer.isHomeHeader ?? null,
+      expiryDate: offer.expiryDate || null,
+      isActive: offer.isActive || null,
+      isHomeHeader: offer.isHomeHeader || null,
       createdAt: now
     };
     this.offers.set(id, newOffer);
@@ -340,12 +349,12 @@ export class MemStorage implements IStorage {
 
     const updatedOffer: Offer = {
       id,
-      title: offer.title ?? existingOffer.title,
-      description: offer.description ?? existingOffer.description,
-      imageUrl: offer.imageUrl ?? existingOffer.imageUrl,
-      expiryDate: offer.expiryDate ?? existingOffer.expiryDate,
-      isActive: offer.isActive ?? existingOffer.isActive,
-      isHomeHeader: offer.isHomeHeader ?? existingOffer.isHomeHeader,
+      title: offer.title || existingOffer.title,
+      description: offer.description || existingOffer.description,
+      imageUrl: offer.imageUrl || existingOffer.imageUrl,
+      expiryDate: offer.expiryDate || existingOffer.expiryDate,
+      isActive: offer.isActive || existingOffer.isActive,
+      isHomeHeader: offer.isHomeHeader || existingOffer.isHomeHeader,
       createdAt: existingOffer.createdAt
     };
     
