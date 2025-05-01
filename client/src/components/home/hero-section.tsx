@@ -13,27 +13,27 @@ interface HeroSectionProps {
 // Array of furniture showcase images for the carousel
 const carouselImages = [
   {
-    src: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&q=80&w=1000",
+    src: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&q=95&w=1800",
     alt: "Contemporary Dining Area"
   },
   {
-    src: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&q=80&w=1000",
+    src: "https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&q=95&w=1800",
     alt: "Luxury Bedroom Furniture"
   },
   {
-    src: "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?auto=format&fit=crop&q=80&w=1000",
+    src: "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?auto=format&fit=crop&q=95&w=1800",
     alt: "Designer Living Space"
   },
   {
-    src: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?auto=format&fit=crop&q=80&w=1000",
+    src: "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?auto=format&fit=crop&q=95&w=1800",
     alt: "Minimalist Home Office"
   },
   {
-    src: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=80&w=1000",
+    src: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&q=95&w=1800",
     alt: "Elegant Bedroom Design"
   },
   {
-    src: "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&q=80&w=1000",
+    src: "https://images.unsplash.com/photo-1617806118233-18e1de247200?auto=format&fit=crop&q=95&w=1800",
     alt: "Luxury Dining Collection"
   }
 ];
@@ -84,7 +84,7 @@ export default function HeroSection({ offer }: HeroSectionProps) {
   }, [emblaApi, onSelect]);
 
   return (
-    <section className="relative bg-secondary py-16 md:py-24">
+    <section className="relative bg-secondary py-12 md:py-16">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div>
