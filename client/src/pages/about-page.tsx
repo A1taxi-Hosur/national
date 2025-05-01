@@ -1,5 +1,9 @@
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import samosaPartyLogo from "../assets/logos/Samosa_Party_Logo.png";
+import amrTechparkLogo from "../assets/logos/amr-techpark-logo.jpg";
+import cleartaxLogo from "../assets/logos/cleartax-logo.jpg";
+import gitamUniversityLogo from "../assets/logos/gitam-university-logo.png";
 
 export default function AboutPage() {
   return (
@@ -130,25 +134,37 @@ export default function AboutPage() {
               </p>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 items-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
               <div className="flex justify-center items-center p-6 h-28 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30">
-                <div className="text-center font-bold text-lg text-neutral-dark">GITAM <span className="text-primary">UNIVERSITY</span></div>
+                <img 
+                  src={gitamUniversityLogo} 
+                  alt="GITAM University" 
+                  className="h-full object-contain" 
+                />
               </div>
               
               <div className="flex justify-center items-center p-6 h-28 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30">
-                <div className="text-center font-bold text-lg text-neutral-dark">OLIVE <span className="text-primary">CAFE</span></div>
+                <img 
+                  src={cleartaxLogo} 
+                  alt="ClearTax" 
+                  className="h-full object-contain" 
+                />
               </div>
               
               <div className="flex justify-center items-center p-6 h-28 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30">
-                <div className="text-center font-bold text-lg text-neutral-dark">CLEAR<span className="text-primary">TAX</span></div>
+                <img 
+                  src={amrTechparkLogo} 
+                  alt="AMR Techpark" 
+                  className="h-full object-contain" 
+                />
               </div>
               
               <div className="flex justify-center items-center p-6 h-28 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30">
-                <div className="text-center font-bold text-lg text-neutral-dark">AMR <span className="text-primary">TECHPARK</span></div>
-              </div>
-              
-              <div className="flex justify-center items-center p-6 h-28 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/30">
-                <div className="text-center font-bold text-lg text-neutral-dark">SAMOSA <span className="text-primary">PARTY</span></div>
+                <img 
+                  src={samosaPartyLogo} 
+                  alt="Samosa Party" 
+                  className="h-full object-contain" 
+                />
               </div>
             </div>
             
