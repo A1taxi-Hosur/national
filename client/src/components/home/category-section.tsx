@@ -30,6 +30,11 @@ export default function CategorySection() {
       image: "https://images.unsplash.com/photo-1571508601891-ca5e7a713859?auto=format&fit=crop&q=80&w=800"
     },
     {
+      name: "Restaurant Furniture",
+      description: "High-quality furniture solutions for restaurants and cafes",
+      image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=800"
+    },
+    {
       name: "Interior Design",
       description: "Professional design services to transform your living spaces",
       image: "https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&q=80&w=800"

@@ -107,7 +107,7 @@ export class MemStorage implements IStorage {
 
   private async createInitialData() {
     // Sample categories
-    const categories = ['Living Room', 'Bedroom', 'Dining', 'Office', 'Decor & Interior', 'Hotel Furniture'];
+    const categories = ['Living Room', 'Bedroom', 'Dining', 'Office', 'Decor & Interior', 'Hotel Furniture', 'Restaurant Furniture'];
     
     // Sample products
     const sampleProducts: InsertProduct[] = [
@@ -197,6 +197,31 @@ export class MemStorage implements IStorage {
         imageUrl: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&q=80&w=900",
         category: "Hotel Furniture",
         price: 78500,
+        status: "active"
+      },
+      {
+        name: "Restaurant Dining Table",
+        description: "Durable and elegant restaurant dining table for commercial use.",
+        imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=900",
+        category: "Restaurant Furniture",
+        price: 54990,
+        isFeatured: true,
+        status: "active"
+      },
+      {
+        name: "Commercial Bar Stool",
+        description: "Stylish and comfortable bar stool for restaurant and cafe use.",
+        imageUrl: "https://images.unsplash.com/photo-1597072689227-8882273e8f6a?auto=format&fit=crop&q=80&w=900",
+        category: "Restaurant Furniture",
+        price: 12990,
+        status: "active"
+      },
+      {
+        name: "Banquet Chair Set",
+        description: "Stack-able banquet chairs perfect for restaurants and event venues.",
+        imageUrl: "https://images.unsplash.com/photo-1595219534953-11f1b41add7d?auto=format&fit=crop&q=80&w=900",
+        category: "Restaurant Furniture",
+        price: 8990,
         status: "active"
       }
     ];
