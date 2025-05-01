@@ -107,7 +107,7 @@ export class MemStorage implements IStorage {
 
   private async createInitialData() {
     // Sample categories
-    const categories = ['Living Room', 'Bedroom', 'Dining', 'Office', 'Decor & Interior'];
+    const categories = ['Living Room', 'Bedroom', 'Dining', 'Office', 'Decor & Interior', 'Hotel Furniture'];
     
     // Sample products
     const sampleProducts: InsertProduct[] = [
@@ -171,6 +171,15 @@ export class MemStorage implements IStorage {
         imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=900",
         category: "Decor & Interior",
         price: 12499,
+        isFeatured: true,
+        status: "active"
+      },
+      {
+        name: "Luxury Hotel Bed Set",
+        description: "Complete bed set with premium linens designed for hotel standards.",
+        imageUrl: "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&q=80&w=900",
+        category: "Hotel Furniture",
+        price: 89999,
         isFeatured: true,
         status: "active"
       }

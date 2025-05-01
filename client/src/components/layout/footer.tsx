@@ -92,6 +92,11 @@ export default function Footer() {
                   Decor & Interior
                 </Link>
               </li>
+              <li>
+                <Link href="/products/Hotel Furniture" className="text-white/80 hover:text-white transition">
+                  Hotel Furniture
+                </Link>
+              </li>
             </ul>
           </div>
           
