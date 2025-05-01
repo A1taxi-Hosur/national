@@ -61,11 +61,11 @@ export default function Header() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <div className="mr-4">
+            <div className="mr-2">
               <img 
                 src={logoIcon}
                 alt="National Furniture Icon" 
-                className="h-16 w-auto object-contain"
+                className="h-20 w-auto object-contain"
               />
             </div>
             <div>
