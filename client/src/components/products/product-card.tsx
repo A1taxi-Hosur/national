@@ -41,14 +41,19 @@ export default function ProductCard({ product }: ProductCardProps) {
               <Eye className="h-4 w-4" />
               <span>Quick View</span>
             </Button>
-            <Link href={`/product/${product.id}`}>
+            <a 
+              href={`https://wa.me/919663628302?text=Hello,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}%20from%20National%20Furniture.%20Please%20provide%20more%20information.`} 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
               <Button 
                 variant="secondary" 
                 className="flex items-center gap-1"
               >
-                <span>View Details</span>
+                <Send className="h-4 w-4" />
+                <span>Send Enquiry</span>
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
         <div className="p-4">
