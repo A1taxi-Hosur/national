@@ -57,7 +57,7 @@ export default function AdminLogin() {
                 NATIONAL FURNITURE
               </h1>
               <p className="text-neutral-dark/70 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Admin Dashboard for National Furniture - Established 1972
+                Admin Dashboard for National Furniture
               </p>
             </div>
             <div className="space-y-2 text-center lg:text-left">
@@ -98,7 +98,7 @@ export default function AdminLogin() {
                           <FormLabel>Username</FormLabel>
                           <FormControl>
                             <Input 
-                              placeholder="admin" 
+                              placeholder="NLfurniture" 
                               disabled={loginMutation.isPending} 
                               {...field} 
                             />
