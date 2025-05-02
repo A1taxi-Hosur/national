@@ -53,7 +53,7 @@ export default function ProductDetailPage() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow flex items-center justify-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          <FurnitureLoading text="Loading furniture details..." />
         </main>
         <Footer />
       </div>
@@ -102,6 +102,12 @@ export default function ProductDetailPage() {
               <p className="text-center text-sm text-neutral-dark/70 mt-2">
                 Click to zoom, drag to move when zoomed
               </p>
+              <div className="flex justify-center">
+                <ARViewButton 
+                  productName={product.name}
+                  productImageUrl={product.imageUrl}
+                />
+              </div>
             </div>
             
             {/* Product info */}
