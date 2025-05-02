@@ -491,4 +491,153 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database Storage implementation
+import { db } from "./db";
+import { products, users, offers, media, contacts } from "@shared/schema";
+import { eq } from "drizzle-orm";
+import connectPg from "connect-pg-simple";
+import { pool } from "./db";
+
+const PostgresSessionStore = connectPg(session);
+
+export class DatabaseStorage implements IStorage {
+  sessionStore: session.Store;
+
+  constructor() {
+    this.sessionStore = new PostgresSessionStore({ 
+      pool, 
+      createTableIfMissing: true 
+    });
+  }
+
+  // User methods
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
+  }
+
+  async createUser(user: InsertUser): Promise<User> {
+    const [newUser] = await db.insert(users).values(user).returning();
+    return newUser;
+  }
+
+  // Product methods
+  async getAllProducts(): Promise<Product[]> {
+    return await db.select().from(products);
+  }
+
+  async getProduct(id: number): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product || undefined;
+  }
+
+  async getProductsByCategory(category: string): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.category, category));
+  }
+
+  async getFeaturedProducts(): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.isFeatured, true));
+  }
+
+  async createProduct(product: InsertProduct): Promise<Product> {
+    const [newProduct] = await db.insert(products).values(product).returning();
+    return newProduct;
+  }
+
+  async updateProduct(id: number, product: InsertProduct): Promise<Product | undefined> {
+    const [updatedProduct] = await db.update(products)
+      .set(product)
+      .where(eq(products.id, id))
+      .returning();
+    return updatedProduct || undefined;
+  }
+
+  async deleteProduct(id: number): Promise<boolean> {
+    const result = await db.delete(products).where(eq(products.id, id)).returning();
+    return result.length > 0;
+  }
+
+  // Offer methods
+  async getAllOffers(): Promise<Offer[]> {
+    return await db.select().from(offers);
+  }
+
+  async getOffer(id: number): Promise<Offer | undefined> {
+    const [offer] = await db.select().from(offers).where(eq(offers.id, id));
+    return offer || undefined;
+  }
+
+  async createOffer(offer: InsertOffer): Promise<Offer> {
+    const [newOffer] = await db.insert(offers).values(offer).returning();
+    return newOffer;
+  }
+
+  async updateOffer(id: number, offer: InsertOffer): Promise<Offer | undefined> {
+    const [updatedOffer] = await db.update(offers)
+      .set(offer)
+      .where(eq(offers.id, id))
+      .returning();
+    return updatedOffer || undefined;
+  }
+
+  async deleteOffer(id: number): Promise<boolean> {
+    const result = await db.delete(offers).where(eq(offers.id, id)).returning();
+    return result.length > 0;
+  }
+
+  // Media methods
+  async getAllMedia(): Promise<Media[]> {
+    return await db.select().from(media);
+  }
+
+  async getMedia(id: number): Promise<Media | undefined> {
+    const [mediaItem] = await db.select().from(media).where(eq(media.id, id));
+    return mediaItem || undefined;
+  }
+
+  async createMedia(mediaItem: InsertMedia): Promise<Media> {
+    const [newMedia] = await db.insert(media).values(mediaItem).returning();
+    return newMedia;
+  }
+
+  async deleteMedia(id: number): Promise<boolean> {
+    const result = await db.delete(media).where(eq(media.id, id)).returning();
+    return result.length > 0;
+  }
+
+  // Contact methods
+  async getAllContacts(): Promise<Contact[]> {
+    return await db.select().from(contacts);
+  }
+
+  async getContact(id: number): Promise<Contact | undefined> {
+    const [contact] = await db.select().from(contacts).where(eq(contacts.id, id));
+    return contact || undefined;
+  }
+
+  async createContact(contact: InsertContact): Promise<Contact> {
+    const [newContact] = await db.insert(contacts).values(contact).returning();
+    return newContact;
+  }
+
+  // Category methods
+  async getCategories(): Promise<string[]> {
+    const productList = await db.select({ category: products.category }).from(products);
+    const categories = new Set<string>();
+    productList.forEach(product => {
+      categories.add(product.category);
+    });
+    return Array.from(categories);
+  }
+}
+
+// Export the database storage - use this for production
+export const storage = new DatabaseStorage();
+
+// For development/testing, you can switch between memory and database storage
+// export const storage = new MemStorage();

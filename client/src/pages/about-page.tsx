@@ -37,7 +37,7 @@ export default function AboutPage() {
                     <p className="text-neutral-dark/70">Years of Excellence</p>
                   </div>
                   <div>
-                    <p className="text-4xl font-bold text-primary">10K+</p>
+                    <p className="text-4xl font-bold text-primary">25K+</p>
                     <p className="text-neutral-dark/70">Happy Customers</p>
                   </div>
                   <div>
