@@ -1,15 +1,13 @@
 import { useEffect } from "react";
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { Send, ArrowLeft } from "lucide-react";
+import { Loader2, Send, ArrowLeft } from "lucide-react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Product } from "@shared/schema";
 import ProductZoomImage from "@/components/products/product-zoom-image";
-import ARViewButton from "@/components/products/ar-view-button";
-import { FurnitureLoading } from "@/components/ui/furniture-spinner";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -53,7 +51,7 @@ export default function ProductDetailPage() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow flex items-center justify-center">
-          <FurnitureLoading text="Loading furniture details..." />
+          <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </main>
         <Footer />
       </div>
@@ -102,12 +100,6 @@ export default function ProductDetailPage() {
               <p className="text-center text-sm text-neutral-dark/70 mt-2">
                 Click to zoom, drag to move when zoomed
               </p>
-              <div className="flex justify-center">
-                <ARViewButton 
-                  productName={product.name}
-                  productImageUrl={product.imageUrl}
-                />
-              </div>
             </div>
             
             {/* Product info */}
