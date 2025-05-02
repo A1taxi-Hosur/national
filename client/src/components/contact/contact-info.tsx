@@ -54,20 +54,7 @@ export default function ContactInfo() {
         </div>
       </div>
       
-      {/* Website */}
-      {placeData.website && (
-        <div className="mt-6 pt-4 border-t border-gray-100">
-          <a 
-            href={placeData.website}
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-primary hover:text-primary/80 inline-flex items-center"
-          >
-            <span className="mr-1">Visit our website</span>
-            <ExternalLink className="h-4 w-4" />
-          </a>
-        </div>
-      )}
+      {/* Website button removed as requested */}
     </div>
   );
 }

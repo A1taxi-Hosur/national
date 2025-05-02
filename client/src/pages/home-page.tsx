@@ -7,7 +7,7 @@ import FeaturedProducts from "@/components/home/featured-products";
 import Testimonials from "@/components/home/testimonials";
 import { useQuery } from "@tanstack/react-query";
 import { Offer, Product } from "@shared/schema";
-import { Loader2 } from "lucide-react";
+import { FurnitureLoading } from "@/components/ui/furniture-spinner";
 
 export default function HomePage() {
   // Scroll to top when visiting home page
@@ -43,7 +43,7 @@ export default function HomePage() {
       <main className="flex-grow">
         {isLoading ? (
           <div className="h-screen flex items-center justify-center">
-            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <FurnitureLoading text="Loading furniture collections..." />
           </div>
         ) : (
           <>
