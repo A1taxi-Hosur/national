@@ -7,9 +7,10 @@ import {
   MapPin, 
   FacebookIcon, 
   Instagram, 
-  Twitter,
+  Youtube,
   ExternalLink 
 } from "lucide-react";
+import justdialLogo from "../assets/justdial.webp";
 
 export default function ContactPage() {
   const placeData = getPlaceData();
@@ -37,14 +38,21 @@ export default function ContactPage() {
                 <div className="mt-8">
                   <h3 className="text-xl font-bold font-heading text-primary mb-4">Find Us On</h3>
                   <div className="flex space-x-4">
-                    <a href="#" className="bg-secondary p-3 rounded-full text-primary hover:bg-primary hover:text-white transition">
+                    <a href="https://www.facebook.com/nationalfurnitureandinteriors/" target="_blank" rel="noopener noreferrer" className="bg-secondary p-3 rounded-full text-primary hover:bg-primary hover:text-white transition">
                       <FacebookIcon className="h-6 w-6" />
                     </a>
-                    <a href="#" className="bg-secondary p-3 rounded-full text-primary hover:bg-primary hover:text-white transition">
+                    <a href="https://www.instagram.com/nationalfurnitureinterior/" target="_blank" rel="noopener noreferrer" className="bg-secondary p-3 rounded-full text-primary hover:bg-primary hover:text-white transition">
                       <Instagram className="h-6 w-6" />
                     </a>
-                    <a href="#" className="bg-secondary p-3 rounded-full text-primary hover:bg-primary hover:text-white transition">
-                      <Twitter className="h-6 w-6" />
+                    <a href="https://www.youtube.com/@sibgathsibgath1065" target="_blank" rel="noopener noreferrer" className="bg-secondary p-3 rounded-full text-primary hover:bg-primary hover:text-white transition">
+                      <Youtube className="h-6 w-6" />
+                    </a>
+                    <a href="https://www.justdial.com/jdmart/Bangalore/National-Furniture-Interiors-Opposite-to-Purva-Fairmount-Hsr-Layout-Sector-2/080PXX80-XX80-161203142958-H2Z7_BZDET/catalogue" target="_blank" rel="noopener noreferrer" className="bg-secondary p-3 rounded-full text-primary hover:bg-primary hover:text-white transition">
+                      <img 
+                        src={justdialLogo} 
+                        alt="JustDial" 
+                        className="h-6 w-6 object-contain"
+                      />
                     </a>
                   </div>
                 </div>
