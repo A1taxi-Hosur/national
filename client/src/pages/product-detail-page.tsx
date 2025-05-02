@@ -1,13 +1,15 @@
 import { useEffect } from "react";
 import { useParams, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2, Send, ArrowLeft } from "lucide-react";
+import { Send, ArrowLeft } from "lucide-react";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Product } from "@shared/schema";
 import ProductZoomImage from "@/components/products/product-zoom-image";
+import ARViewButton from "@/components/products/ar-view-button";
+import { FurnitureLoading } from "@/components/ui/furniture-spinner";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
