@@ -78,18 +78,18 @@ export default function Header() {
           </Link>
           
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/" className={`nav-link ${isActive('/') && !isActive('/products') && !isActive('/about') && !isActive('/contact') ? 'active' : ''} text-neutral-dark hover:text-primary transition`}>
+          <nav className="hidden md:flex items-center space-x-10">
+            <Link href="/" className={`nav-link ${isActive('/') && !isActive('/products') && !isActive('/about') && !isActive('/contact') ? 'active' : ''} text-neutral-dark hover:text-primary transition text-lg font-medium px-3 py-2`}>
               Home
             </Link>
             
             <div className="relative" ref={dropdownRef}>
               <div 
-                className={`nav-link ${isActive('/products') ? 'active' : ''} text-neutral-dark hover:text-primary transition flex items-center cursor-pointer`}
+                className={`nav-link ${isActive('/products') ? 'active' : ''} text-neutral-dark hover:text-primary transition flex items-center cursor-pointer text-lg font-medium px-3 py-2`}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
                 Products
-                <ChevronDown className={`h-4 w-4 ml-1 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-5 w-5 ml-1 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
               </div>
               {isDropdownOpen && (
                 <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20">
@@ -123,10 +123,10 @@ export default function Header() {
               )}
             </div>
             
-            <Link href="/about" className={`nav-link ${isActive('/about') ? 'active' : ''} text-neutral-dark hover:text-primary transition`}>
+            <Link href="/about" className={`nav-link ${isActive('/about') ? 'active' : ''} text-neutral-dark hover:text-primary transition text-lg font-medium px-3 py-2`}>
               About
             </Link>
-            <Link href="/contact" className={`nav-link ${isActive('/contact') ? 'active' : ''} text-neutral-dark hover:text-primary transition`}>
+            <Link href="/contact" className={`nav-link ${isActive('/contact') ? 'active' : ''} text-neutral-dark hover:text-primary transition text-lg font-medium px-3 py-2`}>
               Contact
             </Link>
           </nav>
@@ -153,54 +153,54 @@ export default function Header() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 pb-3 border-t border-gray-200">
-            <div className="flex flex-col space-y-2 pt-3">
-              <Link href="/" className="px-2 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+            <div className="flex flex-col space-y-3 pt-3">
+              <Link href="/" className="px-3 py-3 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md text-lg font-medium">
                 Home
               </Link>
               
               <div ref={mobileDropdownRef} className="relative">
                 <div 
-                  className={`px-2 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md flex justify-between items-center ${isActive('/products') ? 'text-primary' : ''}`}
+                  className={`px-3 py-3 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md flex justify-between items-center text-lg font-medium ${isActive('/products') ? 'text-primary' : ''}`}
                   onClick={() => setIsMobileDropdownOpen(!isMobileDropdownOpen)}
                 >
                   <span>Products</span>
-                  <ChevronDown className={`h-4 w-4 transition-transform ${isMobileDropdownOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`h-5 w-5 transition-transform ${isMobileDropdownOpen ? 'rotate-180' : ''}`} />
                 </div>
                 
                 {isMobileDropdownOpen && (
                   <div className="ml-4 mt-1 border-l-2 border-primary/20 pl-2 space-y-1">
-                    <Link href="/products" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                    <Link href="/products" className="block px-3 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                       All Products
                     </Link>
-                    <Link href="/products/Living Room" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                    <Link href="/products/Living Room" className="block px-3 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                       Living Room
                     </Link>
-                    <Link href="/products/Bedroom" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                    <Link href="/products/Bedroom" className="block px-3 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                       Bedroom
                     </Link>
-                    <Link href="/products/Dining" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                    <Link href="/products/Dining" className="block px-3 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                       Dining
                     </Link>
-                    <Link href="/products/Office" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                    <Link href="/products/Office" className="block px-3 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                       Office
                     </Link>
-                    <Link href="/products/Decor" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                    <Link href="/products/Decor" className="block px-3 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                       Decor
                     </Link>
-                    <Link href="/products/Hotel Furniture" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                    <Link href="/products/Hotel Furniture" className="block px-3 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                       Hotel Furniture
                     </Link>
-                    <Link href="/products/Restaurant Furniture" className="block px-2 py-1 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+                    <Link href="/products/Restaurant Furniture" className="block px-3 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
                       Restaurant Furniture
                     </Link>
                   </div>
                 )}
               </div>
               
-              <Link href="/about" className="px-2 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+              <Link href="/about" className="px-3 py-3 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md text-lg font-medium">
                 About
               </Link>
-              <Link href="/contact" className="px-2 py-2 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md">
+              <Link href="/contact" className="px-3 py-3 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md text-lg font-medium">
                 Contact
               </Link>
             </div>
