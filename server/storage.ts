@@ -307,10 +307,10 @@ export class MemStorage implements IStorage {
       description: product.description,
       category: product.category,
       imageUrl: product.imageUrl,
-      price: product.price,
+      price: product.price !== undefined ? product.price : null,
       discountedPrice: product.discountedPrice || null,
-      isNew: product.isNew || null,
-      isFeatured: product.isFeatured || null,
+      isNew: product.isNew !== undefined ? product.isNew : null,
+      isFeatured: product.isFeatured !== undefined ? product.isFeatured : null,
       status: product.status || null,
       createdAt: now
     };
@@ -326,15 +326,15 @@ export class MemStorage implements IStorage {
 
     const updatedProduct: Product = {
       id,
-      name: product.name || existingProduct.name,
-      description: product.description || existingProduct.description,
-      category: product.category || existingProduct.category,
-      imageUrl: product.imageUrl || existingProduct.imageUrl,
-      price: product.price || existingProduct.price,
-      discountedPrice: product.discountedPrice || existingProduct.discountedPrice,
-      isNew: product.isNew || existingProduct.isNew,
-      isFeatured: product.isFeatured || existingProduct.isFeatured,
-      status: product.status || existingProduct.status,
+      name: product.name ?? existingProduct.name,
+      description: product.description ?? existingProduct.description,
+      category: product.category ?? existingProduct.category,
+      imageUrl: product.imageUrl ?? existingProduct.imageUrl,
+      price: product.price !== undefined ? product.price : existingProduct.price,
+      discountedPrice: product.discountedPrice !== undefined ? product.discountedPrice : existingProduct.discountedPrice,
+      isNew: product.isNew !== undefined ? product.isNew : existingProduct.isNew,
+      isFeatured: product.isFeatured !== undefined ? product.isFeatured : existingProduct.isFeatured,
+      status: product.status ?? existingProduct.status,
       createdAt: existingProduct.createdAt
     };
     
@@ -382,9 +382,9 @@ export class MemStorage implements IStorage {
       title: offer.title,
       description: offer.description,
       imageUrl: offer.imageUrl,
-      expiryDate: offer.expiryDate || null,
-      isActive: offer.isActive || null,
-      isHomeHeader: offer.isHomeHeader || null,
+      expiryDate: offer.expiryDate !== undefined ? offer.expiryDate : null,
+      isActive: offer.isActive !== undefined ? offer.isActive : null,
+      isHomeHeader: offer.isHomeHeader !== undefined ? offer.isHomeHeader : null,
       createdAt: now
     };
     this.offers.set(id, newOffer);
@@ -399,12 +399,12 @@ export class MemStorage implements IStorage {
 
     const updatedOffer: Offer = {
       id,
-      title: offer.title || existingOffer.title,
-      description: offer.description || existingOffer.description,
-      imageUrl: offer.imageUrl || existingOffer.imageUrl,
-      expiryDate: offer.expiryDate || existingOffer.expiryDate,
-      isActive: offer.isActive || existingOffer.isActive,
-      isHomeHeader: offer.isHomeHeader || existingOffer.isHomeHeader,
+      title: offer.title ?? existingOffer.title,
+      description: offer.description ?? existingOffer.description,
+      imageUrl: offer.imageUrl ?? existingOffer.imageUrl,
+      expiryDate: offer.expiryDate !== undefined ? offer.expiryDate : existingOffer.expiryDate,
+      isActive: offer.isActive !== undefined ? offer.isActive : existingOffer.isActive,
+      isHomeHeader: offer.isHomeHeader !== undefined ? offer.isHomeHeader : existingOffer.isHomeHeader,
       createdAt: existingOffer.createdAt
     };
     
@@ -636,8 +636,5 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-// Export the database storage - use this for production
+// Use the database storage for production
 export const storage = new DatabaseStorage();
-
-// For development/testing, you can switch between memory and database storage
-// export const storage = new MemStorage();
