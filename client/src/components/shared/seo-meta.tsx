@@ -5,6 +5,7 @@ interface SEOMetaProps {
   description: string;
   keywords: string[];
   canonicalUrl?: string;
+  canonicalPath?: string;
   ogImage?: string;
 }
 
@@ -13,6 +14,7 @@ export default function SEOMeta({
   description,
   keywords,
   canonicalUrl,
+  canonicalPath,
   ogImage = "/logo.png",
 }: SEOMetaProps) {
   useEffect(() => {
@@ -23,7 +25,8 @@ export default function SEOMeta({
     const keywordsString = keywords.join(', ');
 
     // Set defaults for canonical URL if not provided
-    const canonical = canonicalUrl || window.location.href;
+    const siteUrl = window.location.origin;
+    const canonical = canonicalUrl || (canonicalPath ? `${siteUrl}${canonicalPath}` : window.location.href);
 
     // Update document head
     document.title = formattedTitle;
@@ -69,7 +72,7 @@ export default function SEOMeta({
       document.head.appendChild(canonicalLink);
     }
     canonicalLink.setAttribute('href', canonical);
-  }, [title, description, keywords, canonicalUrl, ogImage]);
+  }, [title, description, keywords, canonicalUrl, canonicalPath, ogImage]);
 
   // This component doesn't render anything visible
   return null;

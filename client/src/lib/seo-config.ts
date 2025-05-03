@@ -1,8 +1,10 @@
 // Global SEO Configuration
 export const siteInfo = {
   siteName: "National Furniture & Interiors",
+  companyName: "National Furniture & Interiors", // For structured data
   siteUrl: "https://nationalfurniture.in", // Replace with actual domain when deployed
   siteDescription: "Premium furniture & interior solutions for homes, offices, hotels and restaurants in Bangalore.",
+  description: "Premium furniture & interior solutions for homes, offices, hotels and restaurants in Bangalore.", // For structured data
   logoUrl: "/logo.png",
   email: "info@nationalfurniture.in",
   phone: "+919663628302",
