@@ -36,7 +36,8 @@ export default function ContactPage() {
         name={siteInfo.companyName}
         description={siteInfo.description}
         url={siteInfo.siteUrl}
-        telephone={placeData.formatted_phone_number}
+        phone={placeData.formatted_phone_number}
+        email={siteInfo.email}
         address={{
           streetAddress: "3rd cross, 3rd main, 1st Sector HSR Layout, Bangalore",
           addressLocality: "Bangalore",
@@ -44,12 +45,15 @@ export default function ContactPage() {
           postalCode: "560102",
           addressCountry: "IN"
         }}
-        geo={{
-          latitude: 12.9139,
-          longitude: 77.6339
-        }}
+        latitude={12.9139}
+        longitude={77.6339}
         openingHours={placeData.business_hours.map(bh => `${bh.day} ${bh.hours}`)}
-        image={`${siteInfo.siteUrl}/logo.png`}
+        images={[`${siteInfo.siteUrl}/logo.png`]}
+        sameAs={[
+          siteInfo.socialLinks.facebook,
+          siteInfo.socialLinks.instagram,
+          siteInfo.socialLinks.youtube
+        ]}
         priceRange="₹₹₹"
       />
       

@@ -9,8 +9,39 @@ import { FurnitureStoreStructuredData } from "@/components/shared/structured-dat
 import { getKeywordsForPage, siteInfo } from "@/lib/seo-config";
 
 export default function AboutPage() {
+  // Get SEO keywords for about page
+  const aboutKeywords = getKeywordsForPage('about');
+  
   return (
     <div className="min-h-screen flex flex-col">
+      {/* SEO Metadata */}
+      <SEOMeta 
+        title="About Us | National Furniture & Interiors | 15+ Years of Excellence"
+        description="For over 15 years, National Furniture has crafted premium furniture in Bangalore. Learn about our craftsmanship, sustainable materials, and furniture design expertise."
+        keywords={aboutKeywords}
+        canonicalPath="/about"
+      />
+      
+      {/* Structured Data for Furniture Store */}
+      <FurnitureStoreStructuredData 
+        name={siteInfo.companyName}
+        description={siteInfo.description}
+        url={siteInfo.siteUrl}
+        phone={siteInfo.phone}
+        email={siteInfo.email}
+        address={siteInfo.address}
+        latitude={siteInfo.latitude}
+        longitude={siteInfo.longitude}
+        openingHours={siteInfo.openingHours}
+        images={[`${siteInfo.siteUrl}/logo.png`]}
+        sameAs={[
+          siteInfo.socialLinks.facebook,
+          siteInfo.socialLinks.instagram,
+          siteInfo.socialLinks.youtube
+        ]}
+        priceRange="₹₹₹"
+      />
+      
       <Header />
       
       <main className="flex-grow">
