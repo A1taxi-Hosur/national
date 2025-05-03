@@ -388,6 +388,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Serve uploaded files
   app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
 
+  // SEO Routes - Sitemap and Robots.txt
+  app.get('/sitemap.xml', async (req, res) => {
+    try {
+      const products = await storage.getAllProducts();
+      const baseUrl = process.env.BASE_URL || 'https://nationalfurniture.in'; // Fall back to a default
+      const currentDate = new Date().toISOString().split('T')[0];
+      
+      // Start sitemap XML
+      let xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
+      
+      // Static pages
+      const staticPages = [
+        { url: '/', priority: '1.0', changeFreq: 'daily' },
+        { url: '/products', priority: '0.9', changeFreq: 'daily' },
+        { url: '/about', priority: '0.7', changeFreq: 'weekly' },
+        { url: '/contact', priority: '0.8', changeFreq: 'weekly' },
+      ];
+      
+      // Add static pages
+      staticPages.forEach(page => {
+        xml += `
+  <url>
+    <loc>${baseUrl}${page.url}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>${page.changeFreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`;
+      });
+      
+      // Add products pages
+      products.forEach(product => {
+        xml += `
+  <url>
+    <loc>${baseUrl}/products/${product.id}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+      });
+      
+      // Close sitemap
+      xml += `
+</urlset>`;
+      
+      res.setHeader('Content-Type', 'application/xml');
+      res.send(xml);
+    } catch (error) {
+      console.error('Error generating sitemap:', error);
+      res.status(500).send('Error generating sitemap');
+    }
+  });
+  
+  app.get('/robots.txt', (req, res) => {
+    const baseUrl = process.env.BASE_URL || 'https://nationalfurniture.in';
+    const robotsTxt = `User-agent: *
+Allow: /
+Disallow: /auth
+Disallow: /admin
+
+Sitemap: ${baseUrl}/sitemap.xml
+`;
+    
+    res.setHeader('Content-Type', 'text/plain');
+    res.send(robotsTxt);
+  });
+
   // Create HTTP server
   const httpServer = createServer(app);
 
