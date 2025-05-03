@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search } from "lucide-react";
+import SEOMeta from "@/components/shared/seo-meta";
+import { getKeywordsForPage } from "@/lib/seo-config";
 
 export default function ProductsPage() {
   const params = useParams();
@@ -59,21 +61,46 @@ export default function ProductsPage() {
   ) || [];
   
   const sortedProducts = [...(filteredProducts || [])].sort((a, b) => {
+    // Safe defaults in case properties are null or undefined
+    const priceA = a.discountedPrice !== null ? a.discountedPrice : (a.price || 0);
+    const priceB = b.discountedPrice !== null ? b.discountedPrice : (b.price || 0);
+    const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+    
     switch (sortOption) {
       case "price-low":
-        return (a.discountedPrice || a.price) - (b.discountedPrice || b.price);
+        return priceA - priceB;
       case "price-high":
-        return (b.discountedPrice || b.price) - (a.discountedPrice || a.price);
+        return priceB - priceA;
       case "newest":
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        return dateB - dateA;
       case "featured":
       default:
-        return b.isFeatured ? 1 : -1;
+        return (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0);
     }
   });
   
+  // Get SEO keywords for this product category
+  const productKeywords = getKeywordsForPage('products', categoryParam);
+  
+  // Generate SEO title and description based on category
+  const seoTitle = categoryParam 
+    ? `${categoryParam} Furniture Collection | National Furniture`
+    : 'Browse All Furniture Collections | National Furniture';
+    
+  const seoDescription = categoryParam
+    ? `Explore our premium ${categoryParam.toLowerCase()} furniture collection. High-quality craftsmanship, custom sizes available. Visit our showroom in HSR Layout, Bangalore.`
+    : 'Explore our complete furniture collection including bedroom, living room, dining, office, hotel and restaurant furniture. Premium quality at National Furniture & Interiors, Bangalore.';
+
   return (
     <div className="min-h-screen flex flex-col">
+      {/* SEO Metadata */}
+      <SEOMeta 
+        title={seoTitle}
+        description={seoDescription}
+        keywords={productKeywords}
+      />
+      
       <Header />
       
       <main className="flex-grow bg-neutral-light py-12">

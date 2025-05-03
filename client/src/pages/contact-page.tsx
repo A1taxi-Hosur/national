@@ -11,12 +11,48 @@ import {
   ExternalLink 
 } from "lucide-react";
 import justdialLogo from "../assets/justdial.webp";
+import SEOMeta from "@/components/shared/seo-meta";
+import { LocalBusinessStructuredData } from "@/components/shared/structured-data";
+import { getKeywordsForPage, siteInfo } from "@/lib/seo-config";
 
 export default function ContactPage() {
   const placeData = getPlaceData();
 
+  // Get SEO keywords for contact page
+  const contactKeywords = getKeywordsForPage('contact');
+  
   return (
     <div className="min-h-screen flex flex-col">
+      {/* SEO Metadata */}
+      <SEOMeta 
+        title="Contact Us | National Furniture & Interiors | HSR Layout, Bangalore"
+        description="Visit our furniture showroom in HSR Layout, Bangalore. Get directions, contact details, and business hours. Custom furniture orders available. Call +919663628302."
+        keywords={contactKeywords}
+        canonicalPath="/contact"
+      />
+      
+      {/* Structured Data for Local Business */}
+      <LocalBusinessStructuredData 
+        name={siteInfo.companyName}
+        description={siteInfo.description}
+        url={siteInfo.siteUrl}
+        telephone={placeData.formatted_phone_number}
+        address={{
+          streetAddress: "3rd cross, 3rd main, 1st Sector HSR Layout, Bangalore",
+          addressLocality: "Bangalore",
+          addressRegion: "Karnataka",
+          postalCode: "560102",
+          addressCountry: "IN"
+        }}
+        geo={{
+          latitude: 12.9139,
+          longitude: 77.6339
+        }}
+        openingHours={placeData.business_hours.map(bh => `${bh.day} ${bh.hours}`)}
+        image={`${siteInfo.siteUrl}/logo.png`}
+        priceRange="₹₹₹"
+      />
+      
       <Header />
       
       <main className="flex-grow bg-white">

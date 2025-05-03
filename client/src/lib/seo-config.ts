@@ -41,8 +41,20 @@ export const baseKeywords = [
   "national interiors HSR"
 ];
 
+type CategoryKeywords = {
+  [key: string]: string[];
+};
+
+interface PageKeywords {
+  home: string[];
+  products: string[];
+  about: string[];
+  contact: string[];
+  categories: CategoryKeywords;
+}
+
 // Page-specific keyword sets
-export const pageKeywords = {
+export const pageKeywords: PageKeywords = {
   home: [
     "best furniture store bangalore", 
     "luxury furniture HSR layout", 
@@ -176,16 +188,16 @@ export function getKeywordsForPage(page: string, category?: string): string[] {
   
   if (page === 'products' && category) {
     // Add category-specific keywords for product pages
-    const categoryKey = category.toLowerCase() as keyof typeof pageKeywords.categories;
+    const categoryKey = category.toLowerCase();
     if (pageKeywords.categories[categoryKey]) {
       keywords = [...keywords, ...pageKeywords.categories[categoryKey]];
     }
   }
   
   // Add page-specific keywords
-  const pageKey = page as keyof typeof pageKeywords;
-  if (typeof pageKeywords[pageKey] === 'object' && !Array.isArray(pageKeywords[pageKey])) {
-    keywords = [...keywords, ...pageKeywords[page]];
+  const pageKey = page as keyof PageKeywords;
+  if (pageKeywords[pageKey] && pageKey !== 'categories') {
+    keywords = [...keywords, ...pageKeywords[pageKey]];
   }
   
   return keywords;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { View360, Cube3D } from "lucide-react";
+import { Box, Boxes, PenSquare } from "lucide-react";
 import { FurnitureSpinner } from "@/components/ui/furniture-spinner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
@@ -57,7 +57,7 @@ export default function ARViewButton({ productName, productImageUrl }: ARViewBut
         className="flex items-center gap-2 mt-3" 
         onClick={handleARButtonClick}
       >
-        <View360 className="h-4 w-4" />
+        <Box className="h-4 w-4" />
         <span>View in AR</span>
       </Button>
 
@@ -78,13 +78,13 @@ export default function ARViewButton({ productName, productImageUrl }: ARViewBut
               </div>
             ) : !arSupported ? (
               <div className="text-center py-6">
-                <Cube3D className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                <Boxes className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                 <p className="text-lg font-medium mb-2">AR not supported</p>
                 <p className="text-muted-foreground">Your device does not support AR viewing. Try viewing on a mobile iOS or Android device.</p>
               </div>
             ) : (
               <div className="text-center py-6">
-                <View360 className="h-16 w-16 text-primary mx-auto mb-4" />
+                <PenSquare className="h-16 w-16 text-primary mx-auto mb-4" />
                 <p className="text-lg font-medium mb-4">Ready for AR</p>
                 <Button onClick={handleViewInAR} size="lg">
                   View in your space

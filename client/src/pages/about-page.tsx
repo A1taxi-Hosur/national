@@ -4,6 +4,9 @@ import samosaPartyLogo from "../assets/logos/Samosa_Party_Logo.png";
 import amrTechparkLogo from "../assets/logos/amr-techpark-logo.jpg";
 import cleartaxLogo from "../assets/logos/cleartax-logo.jpg";
 import gitamUniversityLogo from "../assets/logos/gitam-university-logo.png";
+import SEOMeta from "@/components/shared/seo-meta";
+import { FurnitureStoreStructuredData } from "@/components/shared/structured-data";
+import { getKeywordsForPage, siteInfo } from "@/lib/seo-config";
 
 export default function AboutPage() {
   return (

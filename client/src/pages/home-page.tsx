@@ -8,6 +8,9 @@ import Testimonials from "@/components/home/testimonials";
 import { useQuery } from "@tanstack/react-query";
 import { Offer, Product } from "@shared/schema";
 import { FurnitureLoading } from "@/components/ui/furniture-spinner";
+import SEOMeta from "@/components/shared/seo-meta";
+import { LocalBusinessStructuredData } from "@/components/shared/structured-data";
+import { getKeywordsForPage, siteInfo } from "@/lib/seo-config";
 
 export default function HomePage() {
   // Scroll to top when visiting home page
@@ -36,8 +39,34 @@ export default function HomePage() {
 
   const isLoading = isLoadingProducts || isLoadingOffers;
 
+  // SEO keywords for home page
+  const homeKeywords = getKeywordsForPage('home');
+
   return (
     <div className="min-h-screen flex flex-col">
+      {/* SEO Metadata */}
+      <SEOMeta 
+        title="Premium Furniture Store in HSR Layout" 
+        description="National Furniture & Interiors - Premium furniture showroom offering a wide range of home, office, hotel, and restaurant furniture in HSR Layout, Bangalore."
+        keywords={homeKeywords}
+      />
+      
+      {/* Structured data for local business */}
+      <LocalBusinessStructuredData
+        name={siteInfo.siteName}
+        description={siteInfo.siteDescription}
+        address={siteInfo.address}
+        phone={siteInfo.phone}
+        email={siteInfo.email}
+        url={siteInfo.siteUrl}
+        latitude={siteInfo.latitude}
+        longitude={siteInfo.longitude}
+        openingHours={siteInfo.openingHours}
+        images={[`${siteInfo.siteUrl}${siteInfo.logoUrl}`]}
+        sameAs={Object.values(siteInfo.socialLinks)}
+        priceRange="₹₹-₹₹₹₹"
+      />
+
       <Header />
       
       <main className="flex-grow">

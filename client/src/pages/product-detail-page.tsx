@@ -8,6 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Product } from "@shared/schema";
 import ProductZoomImage from "@/components/products/product-zoom-image";
+import ARViewButton from "@/components/products/ar-view-button";
+import SEOMeta from "@/components/shared/seo-meta";
+import { ProductStructuredData } from "@/components/shared/structured-data";
+import { getKeywordsForPage, siteInfo } from "@/lib/seo-config";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -75,8 +79,29 @@ export default function ProductDetailPage() {
     );
   }
   
+  // Get SEO keywords for this product category
+  const productKeywords = getKeywordsForPage('products', product.category);
+
   return (
     <div className="min-h-screen flex flex-col">
+      {/* SEO Metadata */}
+      <SEOMeta 
+        title={`${product.name} - ${product.category} Furniture`}
+        description={`${product.description.substring(0, 150)}... | Premium quality furniture by National Furniture & Interiors, Bangalore.`}
+        keywords={productKeywords}
+        ogImage={product.imageUrl}
+      />
+      
+      {/* Structured data for product */}
+      <ProductStructuredData
+        name={product.name}
+        description={product.description}
+        imageUrl={product.imageUrl}
+        category={product.category}
+        url={`${siteInfo.siteUrl}/products/${product.id}`}
+        brand={siteInfo.siteName}
+      />
+
       <Header />
       
       <main className="flex-grow py-8">
@@ -97,9 +122,15 @@ export default function ProductDetailPage() {
                 imageUrl={product.imageUrl} 
                 altText={product.name} 
               />
-              <p className="text-center text-sm text-neutral-dark/70 mt-2">
-                Click to zoom, drag to move when zoomed
-              </p>
+              <div className="flex flex-col items-center">
+                <p className="text-center text-sm text-neutral-dark/70 mt-2">
+                  Click to zoom, drag to move when zoomed
+                </p>
+                <ARViewButton 
+                  productName={product.name}
+                  productImageUrl={product.imageUrl}
+                />
+              </div>
             </div>
             
             {/* Product info */}
