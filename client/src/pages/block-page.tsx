@@ -1,4 +1,4 @@
-import { LockKeyhole, AlertCircle, Phone, Mail, AlertTriangle } from 'lucide-react';
+import { LockKeyhole, AlertTriangle } from 'lucide-react';
 import { useEffect } from 'react';
 
 export default function BlockPage() {
@@ -35,25 +35,12 @@ export default function BlockPage() {
             <h3 className="font-semibold text-gray-800 mb-3">To restore access:</h3>
             <ul className="list-disc pl-5 text-gray-700 space-y-3">
               <li>Complete outstanding payment to Zara Creations</li>
-              <li>Contact the team for immediate assistance</li>
-              <li>Provide proof of payment if already completed</li>
+              <li>Site will be automatically restored after payment verification</li>
             </ul>
           </div>
           
           <div className="flex flex-col items-center bg-blue-50 p-4 rounded-lg">
-            <p className="text-gray-800 font-semibold mb-3">Contact Information:</p>
-            <div className="flex items-center mb-2">
-              <Phone className="h-5 w-5 text-blue-600 mr-2" />
-              <a href="tel:+919988776655" className="text-blue-600 hover:text-blue-800 font-medium">
-                +91 99887 76655
-              </a>
-            </div>
-            <div className="flex items-center">
-              <Mail className="h-5 w-5 text-blue-600 mr-2" />
-              <a href="mailto:support@zaracreations.com" className="text-blue-600 hover:text-blue-800 font-medium">
-                support@zaracreations.com
-              </a>
-            </div>
+            <p className="text-gray-800 font-semibold">Please contact Zara Creations directly for payment options</p>
           </div>
         </div>
         
