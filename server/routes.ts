@@ -409,8 +409,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Serve uploaded files
-  app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
+  // Static file serving is moved to index.ts to ensure it's not overridden by Vite
 
   // SEO Routes - Sitemap and Robots.txt
   app.get('/sitemap.xml', async (req, res) => {
