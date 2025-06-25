@@ -21,10 +21,6 @@ export default function ProductCard({ product }: ProductCardProps) {
             src={product.imageUrl} 
             alt={product.name} 
             className="w-full h-56 object-cover"
-            onError={(e) => {
-              console.error('Image failed to load:', product.imageUrl);
-              e.currentTarget.src = "/placeholder-furniture.jpg";
-            }}
           />
           {product.isNew && (
             <div className="absolute top-2 right-2">

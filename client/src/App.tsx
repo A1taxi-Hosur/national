@@ -12,7 +12,6 @@ import AboutPage from "@/pages/about-page";
 import ProductsPage from "@/pages/products-page";
 import ProductDetailPage from "@/pages/product-detail-page";
 import ContactPage from "@/pages/contact-page";
-import GalleryPage from "@/pages/gallery-page";
 import AdminLogin from "@/pages/admin/login";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminProducts from "@/pages/admin/products";
@@ -27,7 +26,6 @@ function Router() {
       <Route path="/products" component={ProductsPage} />
       <Route path="/products/:category" component={ProductsPage} />
       <Route path="/product/:id" component={ProductDetailPage} />
-      <Route path="/gallery" component={GalleryPage} />
       <Route path="/contact" component={ContactPage} />
       
       {/* Admin Routes */}

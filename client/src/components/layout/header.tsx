@@ -123,9 +123,6 @@ export default function Header() {
               )}
             </div>
             
-            <Link href="/gallery" className={`nav-link ${isActive('/gallery') ? 'active' : ''} text-neutral-dark hover:text-primary transition text-lg font-medium px-3 py-2`}>
-              Gallery
-            </Link>
             <Link href="/about" className={`nav-link ${isActive('/about') ? 'active' : ''} text-neutral-dark hover:text-primary transition text-lg font-medium px-3 py-2`}>
               About
             </Link>
@@ -200,9 +197,6 @@ export default function Header() {
                 )}
               </div>
               
-              <Link href="/gallery" className="px-3 py-3 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md text-lg font-medium">
-                Gallery
-              </Link>
               <Link href="/about" className="px-3 py-3 text-neutral-dark hover:text-primary hover:bg-gray-50 rounded-md text-lg font-medium">
                 About
               </Link>

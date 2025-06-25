@@ -6,8 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Product } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, UploadCloud, Image as ImageIcon, Upload } from "lucide-react";
-import MediaSelector from "./media-selector";
+import { Loader2, UploadCloud, Image as ImageIcon } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -212,74 +211,59 @@ export default function ProductForm({ product, onSuccess }: ProductFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Product Image</FormLabel>
-              <div className="space-y-4">
-                {/* Image Preview */}
-                {imagePreview && (
-                  <div className="border rounded-md p-2">
-                    <div className="relative w-full h-40">
-                      <img 
-                        src={imagePreview} 
-                        alt="Product preview" 
-                        className="w-full h-full object-contain rounded"
-                      />
-                    </div>
-                  </div>
-                )}
-                
-                {/* Image Selection Options */}
-                <div className="space-y-3">
-                  <div className="flex gap-2">
-                    <MediaSelector 
-                      onSelect={(url) => {
-                        field.onChange(url);
-                        setImagePreview(url);
-                      }}
-                      selectedUrl={field.value}
-                      buttonText="Select from Media Library"
+              <div className="flex flex-col space-y-3">
+                <div className="grid grid-cols-1 gap-3">
+                  <FormControl>
+                    <Input 
+                      {...field}
+                      className="hidden"
                     />
-                    <Button 
-                      type="button" 
-                      variant="outline"
-                      onClick={() => document.getElementById('file-upload')?.click()}
-                      disabled={isUploading}
-                    >
+                  </FormControl>
+                  
+                  <div className="border rounded-md p-2">
+                    <Label htmlFor="product-image" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-50">
                       {isUploading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Uploading...
-                        </>
+                        <div className="flex flex-col items-center justify-center">
+                          <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
+                          <p className="text-sm text-gray-500">Uploading...</p>
+                        </div>
+                      ) : imagePreview ? (
+                        <div className="relative w-full h-full">
+                          <img 
+                            src={imagePreview} 
+                            alt="Product preview" 
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
                       ) : (
-                        <>
-                          <Upload className="mr-2 h-4 w-4" />
-                          Upload New
-                        </>
+                        <div className="flex flex-col items-center justify-center">
+                          <UploadCloud className="h-10 w-10 text-gray-400 mb-2" />
+                          <p className="text-sm text-gray-500">Click to upload image</p>
+                          <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 10MB</p>
+                        </div>
                       )}
-                    </Button>
-                  </div>
-                  
-                  <Input
-                    id="file-upload"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    disabled={mutation.isPending || isUploading}
-                  />
-                  
-                  <div className="space-y-2">
-                    <Label className="text-sm text-muted-foreground">Or paste image URL:</Label>
-                    <FormControl>
-                      <Input
-                        value={field.value}
-                        onChange={(e) => {
-                          field.onChange(e.target.value);
-                          setImagePreview(e.target.value);
-                        }}
-                        placeholder="https://example.com/image.jpg"
+                      <Input 
+                        id="product-image"
+                        type="file"
+                        accept="image/*"
+                        className="sr-only"
+                        onChange={handleFileUpload}
                         disabled={mutation.isPending || isUploading}
                       />
-                    </FormControl>
+                    </Label>
                   </div>
+                </div>
+                
+                <div className="flex items-center">
+                  <Input
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(e.target.value);
+                      setImagePreview(e.target.value);
+                    }}
+                    placeholder="Or paste image URL here"
+                    disabled={mutation.isPending || isUploading}
+                  />
                 </div>
               </div>
               <FormMessage />

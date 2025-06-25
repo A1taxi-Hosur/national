@@ -409,58 +409,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Direct image serving route to bypass Vite middleware
-  app.get('/uploads/:filename', (req, res) => {
-    const filename = req.params.filename;
-    const filePath = path.resolve(process.cwd(), 'uploads', filename);
-    
-    console.log(`Image request for: ${filename}, Path: ${filePath}`);
-    
-    // Check if file exists
-    if (!fs.existsSync(filePath)) {
-      console.log(`Image not found: ${filePath}`);
-      return res.status(404).json({ message: 'Image not found' });
-    }
-    
-    // Set appropriate content type and cache headers
-    const ext = path.extname(filename).toLowerCase();
-    if (ext === '.jpg' || ext === '.jpeg') {
-      res.setHeader('Content-Type', 'image/jpeg');
-    } else if (ext === '.png') {
-      res.setHeader('Content-Type', 'image/png');
-    } else if (ext === '.webp') {
-      res.setHeader('Content-Type', 'image/webp');
-    } else if (ext === '.gif') {
-      res.setHeader('Content-Type', 'image/gif');
-    } else if (ext === '.avif') {
-      res.setHeader('Content-Type', 'image/avif');
-    }
-    
-    // Add cache headers for better performance
-    res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    
-    console.log(`Serving image: ${filename}`);
-    // Send the file
-    res.sendFile(filePath);
-  });
-
-  // Image generation route
-  app.post('/api/admin/generate-images', ensureAuthenticated, async (req, res) => {
-    try {
-      const { generateImagesForAllProducts } = await import('./image-generator');
-      
-      // Start the image generation process in the background
-      generateImagesForAllProducts().catch(error => {
-        console.error("Background image generation failed:", error);
-      });
-      
-      res.json({ message: "Image generation started in background" });
-    } catch (error) {
-      console.error("Failed to start image generation:", error);
-      res.status(500).json({ message: "Failed to start image generation" });
-    }
-  });
+  // Serve uploaded files
+  app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
 
   // SEO Routes - Sitemap and Robots.txt
   app.get('/sitemap.xml', async (req, res) => {
