@@ -414,12 +414,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const filename = req.params.filename;
     const filePath = path.resolve(process.cwd(), 'uploads', filename);
     
+    console.log(`Image request for: ${filename}, Path: ${filePath}`);
+    
     // Check if file exists
     if (!fs.existsSync(filePath)) {
+      console.log(`Image not found: ${filePath}`);
       return res.status(404).json({ message: 'Image not found' });
     }
     
-    // Set appropriate content type
+    // Set appropriate content type and cache headers
     const ext = path.extname(filename).toLowerCase();
     if (ext === '.jpg' || ext === '.jpeg') {
       res.setHeader('Content-Type', 'image/jpeg');
@@ -433,6 +436,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.setHeader('Content-Type', 'image/avif');
     }
     
+    // Add cache headers for better performance
+    res.setHeader('Cache-Control', 'public, max-age=86400'); // 24 hours
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    
+    console.log(`Serving image: ${filename}`);
     // Send the file
     res.sendFile(filePath);
   });
