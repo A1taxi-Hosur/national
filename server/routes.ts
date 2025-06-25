@@ -409,7 +409,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Static file serving is moved to index.ts to ensure it's not overridden by Vite
+  // Direct image serving route to bypass Vite middleware
+  app.get('/uploads/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.resolve(process.cwd(), 'uploads', filename);
+    
+    // Check if file exists
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: 'Image not found' });
+    }
+    
+    // Set appropriate content type
+    const ext = path.extname(filename).toLowerCase();
+    if (ext === '.jpg' || ext === '.jpeg') {
+      res.setHeader('Content-Type', 'image/jpeg');
+    } else if (ext === '.png') {
+      res.setHeader('Content-Type', 'image/png');
+    } else if (ext === '.webp') {
+      res.setHeader('Content-Type', 'image/webp');
+    } else if (ext === '.gif') {
+      res.setHeader('Content-Type', 'image/gif');
+    } else if (ext === '.avif') {
+      res.setHeader('Content-Type', 'image/avif');
+    }
+    
+    // Send the file
+    res.sendFile(filePath);
+  });
 
   // SEO Routes - Sitemap and Robots.txt
   app.get('/sitemap.xml', async (req, res) => {
