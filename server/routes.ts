@@ -445,6 +445,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.sendFile(filePath);
   });
 
+  // Image generation route
+  app.post('/api/admin/generate-images', ensureAuthenticated, async (req, res) => {
+    try {
+      const { generateImagesForAllProducts } = await import('./image-generator');
+      
+      // Start the image generation process in the background
+      generateImagesForAllProducts().catch(error => {
+        console.error("Background image generation failed:", error);
+      });
+      
+      res.json({ message: "Image generation started in background" });
+    } catch (error) {
+      console.error("Failed to start image generation:", error);
+      res.status(500).json({ message: "Failed to start image generation" });
+    }
+  });
+
   // SEO Routes - Sitemap and Robots.txt
   app.get('/sitemap.xml', async (req, res) => {
     try {
