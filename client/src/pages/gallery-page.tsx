@@ -20,12 +20,11 @@ export default function GalleryPage() {
 
   const filteredMedia = media.filter(item => {
     const matchesSearch = item.filename.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === "all" || item.category === filterCategory;
-    return matchesSearch && matchesCategory;
+                         item.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesSearch;
   });
 
-  const categories = [...new Set(media.map(item => item.category).filter(Boolean))];
+  const categories = ["Gallery", "Living Room", "Dining", "Bedroom", "Office"];
 
   if (isLoading) {
     return (
@@ -40,7 +39,7 @@ export default function GalleryPage() {
       <SEOMeta 
         title="Gallery - National Furniture & Interiors"
         description="Explore our extensive collection of furniture designs and completed projects. See the quality and craftsmanship that defines National Furniture with 15+ years of excellence."
-        keywords="furniture gallery, interior design, furniture showroom, living room furniture, dining furniture, bedroom furniture, office furniture, HSR Layout Bangalore"
+        keywords={["furniture gallery", "interior design", "furniture showroom", "living room furniture", "dining furniture", "bedroom furniture", "office furniture", "HSR Layout Bangalore"]}
       />
       
       <div className="min-h-screen bg-gray-50">
@@ -106,10 +105,10 @@ export default function GalleryPage() {
                   <div className="aspect-square overflow-hidden">
                     <img
                       src={item.url}
-                      alt={item.description || item.filename}
+                      alt={item.name || item.filename}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
-                        e.currentTarget.src = "/placeholder-furniture.jpg";
+                        e.currentTarget.src = "https://via.placeholder.com/400x400/f3f4f6/6b7280?text=Gallery+Image";
                       }}
                     />
                   </div>
@@ -127,13 +126,11 @@ export default function GalleryPage() {
                   {/* Info */}
                   <div className="p-3">
                     <h3 className="font-medium text-sm mb-1 truncate">
-                      {item.description || item.filename}
+                      {item.name || item.filename}
                     </h3>
-                    {item.category && (
-                      <Badge variant="outline" className="text-xs">
-                        {item.category}
-                      </Badge>
-                    )}
+                    <Badge variant="outline" className="text-xs">
+                      Gallery
+                    </Badge>
                   </div>
                 </div>
               ))}
@@ -148,7 +145,7 @@ export default function GalleryPage() {
               <>
                 <DialogHeader className="p-6 pb-0">
                   <DialogTitle className="flex items-center justify-between">
-                    <span>{selectedImage.description || selectedImage.filename}</span>
+                    <span>{selectedImage.name || selectedImage.filename}</span>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -163,18 +160,16 @@ export default function GalleryPage() {
                   <div className="relative">
                     <img
                       src={selectedImage.url}
-                      alt={selectedImage.description || selectedImage.filename}
+                      alt={selectedImage.name || selectedImage.filename}
                       className="w-full max-h-[70vh] object-contain rounded-lg"
                     />
                   </div>
                   
                   <div className="flex items-center justify-between mt-4">
                     <div>
-                      {selectedImage.category && (
-                        <Badge variant="secondary">
-                          {selectedImage.category}
-                        </Badge>
-                      )}
+                      <Badge variant="secondary">
+                        Gallery
+                      </Badge>
                     </div>
                     <Button variant="outline" size="sm" asChild>
                       <a href={selectedImage.url} download target="_blank" rel="noopener noreferrer">

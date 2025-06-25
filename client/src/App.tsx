@@ -27,6 +27,7 @@ function Router() {
       <Route path="/products" component={ProductsPage} />
       <Route path="/products/:category" component={ProductsPage} />
       <Route path="/product/:id" component={ProductDetailPage} />
+      <Route path="/gallery" component={GalleryPage} />
       <Route path="/contact" component={ContactPage} />
       
       {/* Admin Routes */}
