@@ -39,9 +39,9 @@ export default function ContactPage() {
         phone={placeData.formatted_phone_number}
         email={siteInfo.email}
         address={{
-          streetAddress: "3rd cross, 3rd main, 1st Sector HSR Layout, Bangalore",
-          addressLocality: "Bangalore",
-          addressRegion: "Karnataka",
+          streetAddress: "1315, 24th Main Road, Opposite Purva Fairmont Apartment, Sector - 2",
+          addressLocality: "HSR Layout",
+          addressRegion: "Bangalore",
           postalCode: "560102",
           addressCountry: "IN"
         }}

@@ -47,7 +47,7 @@ export interface PlaceData {
  */
 export const nationalFurnitureData: PlaceData = {
   name: "National Furniture & Interiors",
-  formatted_address: "No.1548, 20th Main Rd, Sector 1, HSR Layout, Bengaluru, Karnataka 560102, India",
+  formatted_address: "1315, 24th Main Road, Opposite Purva Fairmont Apartment, Sector - 2, HSR Layout, Bangalore - 560102, India",
   formatted_phone_number: "096636 28302",
   international_phone_number: "+919663628302",
   website: "https://nationalfurnitures.in/",

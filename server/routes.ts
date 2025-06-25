@@ -274,6 +274,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin Media API (for media upload form)
+  app.get('/api/admin/media', ensureAuthenticated, async (req, res) => {
+    try {
+      const media = await storage.getAllMedia();
+      res.json(media);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch media" });
+    }
+  });
+
+  app.post('/api/admin/media', ensureAuthenticated, async (req, res) => {
+    try {
+      const validation = validateRequest(insertMediaSchema, req.body);
+      if (!validation.success) {
+        return res.status(400).json({ message: validation.error });
+      }
+      
+      const media = await storage.createMedia(validation.data);
+      res.status(201).json(media);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create media" });
+    }
+  });
+
   app.post('/api/media', ensureAuthenticated, upload.single('file'), async (req, res) => {
     try {
       if (!req.file) {

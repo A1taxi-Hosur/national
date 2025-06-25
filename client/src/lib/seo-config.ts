@@ -9,7 +9,7 @@ export const siteInfo = {
   email: "info@nationalfurniture.in",
   phone: "+919663628302",
   address: {
-    streetAddress: "No. 1212, 17th Cross Rd, 6th Sector",
+    streetAddress: "1315, 24th Main Road, Opposite Purva Fairmont Apartment, Sector - 2",
     addressLocality: "HSR Layout",
     addressRegion: "Bangalore",
     postalCode: "560102",
