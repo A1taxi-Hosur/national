@@ -12,6 +12,7 @@ import AboutPage from "@/pages/about-page";
 import ProductsPage from "@/pages/products-page";
 import ProductDetailPage from "@/pages/product-detail-page";
 import ContactPage from "@/pages/contact-page";
+import GalleryPage from "@/pages/gallery-page";
 import AdminLogin from "@/pages/admin/login";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminProducts from "@/pages/admin/products";
