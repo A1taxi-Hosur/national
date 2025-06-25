@@ -8,7 +8,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Serve uploaded files BEFORE any other middleware to ensure they're not overridden
-app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
+// Add specific content type handling for images
+app.use('/uploads', (req, res, next) => {
+  const filePath = path.resolve(process.cwd(), 'uploads', path.basename(req.url));
+  const ext = path.extname(filePath).toLowerCase();
+  
+  // Set correct content type for images
+  if (ext === '.jpg' || ext === '.jpeg') {
+    res.setHeader('Content-Type', 'image/jpeg');
+  } else if (ext === '.png') {
+    res.setHeader('Content-Type', 'image/png');
+  } else if (ext === '.webp') {
+    res.setHeader('Content-Type', 'image/webp');
+  } else if (ext === '.gif') {
+    res.setHeader('Content-Type', 'image/gif');
+  }
+  
+  next();
+}, express.static(path.resolve(process.cwd(), 'uploads')));
 
 app.use((req, res, next) => {
   const start = Date.now();
