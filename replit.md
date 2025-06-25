@@ -10,11 +10,12 @@ Comprehensive furniture website for "NATIONAL FURNITURE & INTERIORS" with admin 
 - Tagline: 15+ years of Excellence
 
 ## Recent Changes
-- **2025-06-25**: Fixed photo upload issue by adding missing `/api/admin/media` API routes
-- **2025-06-25**: Updated address throughout the application to new location
+- **2025-06-25**: Created dedicated Gallery page with 27+ furniture images
+- **2025-06-25**: Added AI image generation system using OpenAI DALL-E 3
+- **2025-06-25**: Added Gallery navigation link to main header menu
 - **2025-06-25**: Enhanced SEO with complete metadata, sitemap generation, and structured data
 - **2025-06-25**: Created media selector component for product image management
-- **2025-06-25**: Improved product form with media library integration
+- **2025-06-25**: Updated address throughout the application to new location
 
 ## Project Architecture
 
