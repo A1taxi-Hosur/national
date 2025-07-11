@@ -119,3 +119,6 @@ Preferred communication style: Simple, everyday language.
 
 Changelog:
 - June 25, 2025. Initial setup
+- January 11, 2025. Updated address to "1315, 24th Main Road, Opposite Purva Fairmont Apartment, Sector - 2, HSR Layout, Bangalore - 560102"
+- January 11, 2025. Fixed photo upload functionality by adding missing `/api/admin/media` POST route
+- January 11, 2025. Implemented "BLOCKED WEBSITE DUE TO PAYMENT" page with ZARA CREATIONS contact message - all public routes now show blocked page while admin access remains available

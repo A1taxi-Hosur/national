@@ -1,5 +1,4 @@
-import { Lock, AlertTriangle, Phone, Mail } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Lock, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function BlockedPage() {
@@ -25,48 +24,14 @@ export default function BlockedPage() {
                 </span>
               </div>
               <p className="text-gray-600 text-sm leading-relaxed">
-                This website has been temporarily blocked due to outstanding payment issues. 
-                Please contact the website owner to resolve this matter.
+                This website has been temporarily blocked due to outstanding payment issues.
               </p>
             </div>
 
-            <div className="border-t border-red-100 pt-6">
-              <h3 className="text-sm font-semibold text-gray-800 mb-3">
-                Contact Information:
-              </h3>
-              
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Phone className="h-4 w-4 text-red-500" />
-                  <span className="text-sm text-gray-700">
-                    +91 96636 28302
-                  </span>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-red-500" />
-                  <span className="text-sm text-gray-700">
-                    info@nationalfurniture.in
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <Button 
-                variant="outline" 
-                className="flex-1 text-red-600 border-red-300 hover:bg-red-50"
-                onClick={() => window.location.reload()}
-              >
-                Retry
-              </Button>
-              
-              <Button 
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white"
-                onClick={() => window.open('tel:+919663628302', '_self')}
-              >
-                Call Now
-              </Button>
+            <div className="border-t border-red-100 pt-6 text-center">
+              <p className="text-lg font-semibold text-gray-800">
+                Contact <span className="text-red-700">ZARA CREATIONS</span> for unblock
+              </p>
             </div>
           </CardContent>
         </Card>
