@@ -17,20 +17,18 @@ import AdminDashboard from "@/pages/admin/dashboard";
 import AdminProducts from "@/pages/admin/products";
 import AdminOffers from "@/pages/admin/offers";
 import AdminMedia from "@/pages/admin/media";
-import BlockedPage from "@/pages/blocked-page";
 
 function Router() {
   return (
     <Switch>
-      {/* Show blocked page for all regular routes */}
-      <Route path="/" component={BlockedPage} />
-      <Route path="/about" component={BlockedPage} />
-      <Route path="/products" component={BlockedPage} />
-      <Route path="/products/:category" component={BlockedPage} />
-      <Route path="/product/:id" component={BlockedPage} />
-      <Route path="/contact" component={BlockedPage} />
+      <Route path="/" component={HomePage} />
+      <Route path="/about" component={AboutPage} />
+      <Route path="/products" component={ProductsPage} />
+      <Route path="/products/:category" component={ProductsPage} />
+      <Route path="/product/:id" component={ProductDetailPage} />
+      <Route path="/contact" component={ContactPage} />
       
-      {/* Admin Routes - Still accessible */}
+      {/* Admin Routes */}
       <Route path="/admin/login" component={AdminLogin} />
       <ProtectedRoute path="/admin" component={AdminDashboard} />
       <ProtectedRoute path="/admin/dashboard" component={AdminDashboard} />
@@ -42,8 +40,8 @@ function Router() {
       <ProtectedRoute path="/admin/offers/new" component={AdminOffers} />
       <ProtectedRoute path="/admin/media" component={AdminMedia} />
       
-      {/* Fallback to blocked page */}
-      <Route component={BlockedPage} />
+      {/* Fallback to 404 */}
+      <Route component={NotFound} />
     </Switch>
   );
 }
